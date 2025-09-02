@@ -86,74 +86,74 @@ int main()
   dataItemsDB.aggregateSubSamples();
 
 
-  // /* ************* CryosphereDT *************** */
+  /* ************* CryosphereDT *************** */
 
-  // /* load the data records for CryosphereDT */
-  // DataItemList cryosphDataItems(CryosphereDT,&dataItemsDB,&datasetInfos);
+  /* load the data records for CryosphereDT */
+  DataItemList cryosphDataItems(CryosphereDT,&dataItemsDB,&datasetInfos);
 
-  // /* construct the station list for CryosphereDT */
-  // StationList cryosphStations=
-  //   eventsDB.collateStations(cryosphDataItems.acceptedEventNumbers.keys(),15.,1.,&eventsDB);
-  // cryosphStations.writeSpreadsheetFile(idpOutputDir+"stations/",
-  //                                      "IDP2025_Cryosphere_Stations.txt",&eventsDB);
+  /* construct the station list for CryosphereDT */
+  StationList cryosphStations=
+    eventsDB.collateStations(cryosphDataItems.acceptedEventNumbers.keys(),15.,1.,&eventsDB);
+  cryosphStations.writeSpreadsheetFile(idpOutputDir+"stations/",
+                                       "IDP2025_Cryosphere_Stations.txt",&eventsDB);
 
-  // /* setup the IDP parameter set for CryosphereDT */
-  // ParamSet cryosphPrms(CryosphereDT,&params,&cryosphDataItems,&datasetInfos);
-  // cryosphPrms.writeParamLists(idpOutputDir+"parameter_lists/","IDP2025_Parameters_Cryosphere");
+  /* setup the IDP parameter set for CryosphereDT */
+  ParamSet cryosphPrms(CryosphereDT,&params,&cryosphDataItems,&datasetInfos);
+  cryosphPrms.writeParamLists(idpOutputDir+"parameter_lists/","IDP2025_Parameters_Cryosphere");
 
-  // /* collate meta data and data and write to ODV spreadsheet file */
-  // outFn="GEOTRACES_IDP2025_Cryosphere_Data.txt";
-  // cryosphPrms.writeDataAsSpreadsheet(&cryosphStations,&cruisesDB,
-  //                                    &docuByExtPrmName,&bioGeotracesInfos,
-  //                                    &piInfosByName,&keyVarsByDataVar,
-  //                                    &unitConverter,&bottleFlagDescr,
-  //                                    idpOutputDir+"data/cryosphere/",outFn);
+  /* collate meta data and data and write to ODV spreadsheet file */
+  outFn="GEOTRACES_IDP2025_Cryosphere_Data.txt";
+  cryosphPrms.writeDataAsSpreadsheet(&cryosphStations,&cruisesDB,
+                                     &docuByExtPrmName,&bioGeotracesInfos,
+                                     &piInfosByName,&keyVarsByDataVar,
+                                     &unitConverter,&bottleFlagDescr,
+                                     idpOutputDir+"data/cryosphere/",outFn);
 
-  // /* ************* PrecipitationDT *************** */
+  /* ************* PrecipitationDT *************** */
 
-  // /* load the data records for PrecipitationDT */
-  // DataItemList precipDataItems(PrecipitationDT,&dataItemsDB,&datasetInfos);
+  /* load the data records for PrecipitationDT */
+  DataItemList precipDataItems(PrecipitationDT,&dataItemsDB,&datasetInfos);
 
-  // /* construct the station list for PrecipitationDT */
-  // StationList precipStations=
-  //   eventsDB.collateStations(precipDataItems.acceptedEventNumbers.keys(),15.,1.,&eventsDB);
-  // precipStations.writeSpreadsheetFile(idpOutputDir+"stations/",
-  //                                     "IDP2025_Precipitation_Stations.txt",&eventsDB);
+  /* construct the station list for PrecipitationDT */
+  StationList precipStations=
+    eventsDB.collateStations(precipDataItems.acceptedEventNumbers.keys(),15.,1.,&eventsDB);
+  precipStations.writeSpreadsheetFile(idpOutputDir+"stations/",
+                                      "IDP2025_Precipitation_Stations.txt",&eventsDB);
 
-  // /* setup the IDP parameter set for PrecipitationDT */
-  // ParamSet precipPrms(PrecipitationDT,&params,&precipDataItems,&datasetInfos);
-  // precipPrms.writeParamLists(idpOutputDir+"parameter_lists/","IDP2025_Parameters_Precipitation");
+  /* setup the IDP parameter set for PrecipitationDT */
+  ParamSet precipPrms(PrecipitationDT,&params,&precipDataItems,&datasetInfos);
+  precipPrms.writeParamLists(idpOutputDir+"parameter_lists/","IDP2025_Parameters_Precipitation");
 
-  // /* collate meta data and data and write to ODV spreadsheet file */
-  // outFn="GEOTRACES_IDP2025_Precipitation_Data.txt";
-  // precipPrms.writeDataAsSpreadsheet(&precipStations,&cruisesDB,
-  //                                   &docuByExtPrmName,&bioGeotracesInfos,
-  //                                   &piInfosByName,&keyVarsByDataVar,
-  //                                   &unitConverter,&bottleFlagDescr,
-  //                                   idpOutputDir+"data/precipitation/",outFn);
+  /* collate meta data and data and write to ODV spreadsheet file */
+  outFn="GEOTRACES_IDP2025_Precipitation_Data.txt";
+  precipPrms.writeDataAsSpreadsheet(&precipStations,&cruisesDB,
+                                    &docuByExtPrmName,&bioGeotracesInfos,
+                                    &piInfosByName,&keyVarsByDataVar,
+                                    &unitConverter,&bottleFlagDescr,
+                                    idpOutputDir+"data/precipitation/",outFn);
 
-  // /* ************* AerosolsDT *************** */
+  /* ************* AerosolsDT *************** */
 
-  // /* load the data records for AerosolsDT */
-  // DataItemList aerosolDataItems(AerosolsDT,&dataItemsDB,&datasetInfos);
+  /* load the data records for AerosolsDT */
+  DataItemList aerosolDataItems(AerosolsDT,&dataItemsDB,&datasetInfos);
 
-  // /* construct the station list for AerosolsDT */
-  // StationList aerosolStations=
-  //   eventsDB.collateStations(aerosolDataItems.acceptedEventNumbers.keys(),15.,1.,&eventsDB);
-  // aerosolStations.writeSpreadsheetFile(idpOutputDir+"stations/",
-  //                                      "IDP2025_Aerosols_Stations.txt",&eventsDB);
+  /* construct the station list for AerosolsDT */
+  StationList aerosolStations=
+    eventsDB.collateStations(aerosolDataItems.acceptedEventNumbers.keys(),15.,1.,&eventsDB);
+  aerosolStations.writeSpreadsheetFile(idpOutputDir+"stations/",
+                                       "IDP2025_Aerosols_Stations.txt",&eventsDB);
 
-  // /* setup the IDP parameter set for AerosolsDT */
-  // ParamSet aerosolPrms(AerosolsDT,&params,&aerosolDataItems,&datasetInfos);
-  // aerosolPrms.writeParamLists(idpOutputDir+"parameter_lists/","IDP2025_Parameters_Aerosols");
+  /* setup the IDP parameter set for AerosolsDT */
+  ParamSet aerosolPrms(AerosolsDT,&params,&aerosolDataItems,&datasetInfos);
+  aerosolPrms.writeParamLists(idpOutputDir+"parameter_lists/","IDP2025_Parameters_Aerosols");
 
-  // /* collate meta data and data and write to ODV spreadsheet file */
-  // outFn="GEOTRACES_IDP2025_Aerosol_Data.txt";
-  // aerosolPrms.writeDataAsSpreadsheet(&aerosolStations,&cruisesDB,
-  //                                    &docuByExtPrmName,&bioGeotracesInfos,
-  //                                    &piInfosByName,&keyVarsByDataVar,
-  //                                    &unitConverter,&bottleFlagDescr,
-  //                                    idpOutputDir+"data/aerosols/",outFn);
+  /* collate meta data and data and write to ODV spreadsheet file */
+  outFn="GEOTRACES_IDP2025_Aerosol_Data.txt";
+  aerosolPrms.writeDataAsSpreadsheet(&aerosolStations,&cruisesDB,
+                                     &docuByExtPrmName,&bioGeotracesInfos,
+                                     &piInfosByName,&keyVarsByDataVar,
+                                     &unitConverter,&bottleFlagDescr,
+                                     idpOutputDir+"data/aerosols/",outFn);
 
   /* ************* SeawaterDT *************** */
 

@@ -88,7 +88,7 @@ public:
   //!< accepted GEOTRACES IDs (value) by cruise names (keys)
   QMap<QString,int> acceptedPrmNames; //!< accepted parameter names
   QMap<QString,int> acceptedExtPrmNames; //!< accepted extended parameter names
-  QMap<QString,int> errMap; //!< error messages
+  QMap<QString,int> errMsgs; //!< error messages
 };
 
 /**************************************************************************/

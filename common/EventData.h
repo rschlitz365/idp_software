@@ -62,7 +62,7 @@ public:
   static QStringList spreadsheetHeaderLines(ParamSet *paramSet,
                                             InfoMap *keyVarsByDataVar);
   void writeInfoFile(const QString& fn,const QString& prmName,
-                     const QList<int> idxList,const QStringList& barcodes);
+                     const QList<int> idxList);
 
   Station *stationPtr; //!< pointer to parent station
   EventInfo eventInfo; //!< event info object

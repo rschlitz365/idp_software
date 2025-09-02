@@ -243,6 +243,13 @@ void DataItemsDB::appendItems(const QStringList& lines,QChar splitChar)
       extPrmName=di.parameter;
       eventInfoItem=eventsDBPtr->value(QString::number(di.eventNumber));
       datasetInfoItem=datasetInfosPtr->value(extPrmName);
+
+      if (datasetInfoItem.isEmpty())
+        {
+          errMsgs.insert(QString("DataItemsDB::Dataset not found %1").arg(extPrmName),1);
+          continue;
+        }
+
       cruise=datasetInfoItem.at(datasetInfosPtr->idxCruise);
       cruiseFromEvents=eventInfoItem.at(0);
       geotracesCruise=datasetInfosPtr->geotracesCruiseNameFor(cruise);
@@ -255,7 +262,7 @@ void DataItemsDB::appendItems(const QStringList& lines,QChar splitChar)
 
       if (cruise!=cruiseFromEvents)
         {
-          errMap.insert(QString("DataItemsDB::CruiseMismatch(%1,%2) %3 %4")
+          errMsgs.insert(QString("DataItemsDB::CruiseMismatch(%1,%2) event#: %3 %4")
             .arg(cruise).arg(cruiseFromEvents)
             .arg(di.eventNumber).arg(di.parameter),1);
         }
@@ -327,7 +334,7 @@ void DataItemsDB::writeDiagnostics(CruisesDB *cruisesDBPtr)
   const QString fmt="%1\t%2\t%3\t%4\t%5\t%6 - %7\t%8";
   const QString dir=idpOutputDir+"data/"; QDir().mkpath(dir);
 
-  appendRecords(dir+"DataItemsDB_error_messages.txt",errMap.keys(),true);
+  appendRecords(dir+"DataItemsDB_error_messages.txt",errMsgs.keys(),true);
   appendRecords(dir+"DataItemsDB_accepted_cruises.txt",
                 acceptedCruises.keys(),true);
   appendRecords(dir+"DataItemsDB_accepted_parameters.txt",

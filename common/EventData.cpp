@@ -277,7 +277,7 @@ void EventData::getValues(const QString& uPrmName,int smplIdx,
       infoStr=QString("lf:infos/%1.html").arg(infoFn);
       if (!infoFiles.contains(infoFn))
         {
-          writeInfoFile(infoFn,prmName,contribIdxs,barcodes);
+          writeInfoFile(infoFn,prmName,contribIdxs);
           infoFiles.insert(infoFn,1);
         }
     }
@@ -593,7 +593,7 @@ QStringList EventData::spreadsheetHeaderLines(ParamSet *paramSet,
 
 /**************************************************************************/
 void EventData::writeInfoFile(const QString& fn,const QString& prmName,
-                              const QList<int> idxList,const QStringList& barcodes)
+                              const QList<int> idxList)
 /**************************************************************************/
 /*!
 
