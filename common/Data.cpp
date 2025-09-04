@@ -490,7 +490,7 @@ void DataItemList::validateUnits(ParamSet *paramSet)
         bu.insert(fmt.arg(di.parameter).arg(di.unit).arg(trgUnits),1);
     }
 
-  QString dir=idpDiagnosticsDir+"data/"; QDir().mkpath(dir);
+  QString dir=idpDiagnDir+"data/"; QDir().mkpath(dir);
   QString fn=QString("BadUnits_%1.txt")
     .arg(ParamSet::dataTypeNameFromType(type));
   appendRecords(dir+fn,bu.keys(),true);

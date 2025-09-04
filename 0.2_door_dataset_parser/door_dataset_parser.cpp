@@ -10,6 +10,7 @@
 #include "common/globalVars.h"
 #include "common/globalFunctions.h"
 
+#include <QDir>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -27,9 +28,9 @@ void extractScientists(const QJsonArray& scientistsArr,
                        QStringList *scientistEmails)
 /**************************************************************************/
 /*!
-  
-  \brief . 
-  
+
+  \brief .
+
 */
 {
   int i,n=scientistsArr.size(); QJsonObject scientist;
@@ -48,9 +49,9 @@ QStringList namesFromOrcIDs(const QStringList& orcIds,
                             const QMap<QString,QString>& namesByOrcIds)
 /**************************************************************************/
 /*!
-  
-  \brief . 
-  
+
+  \brief .
+
 */
 {
   int i,n=orcIds.size(); QString orcId; QStringList sl;
@@ -68,9 +69,9 @@ QString jsonStrValue(const QJsonValue& jsonVal,
                      const QString& dfltStr=QString("null"))
 /**************************************************************************/
 /*!
-  
-  \brief . 
-  
+
+  \brief .
+
 */
 {
   return jsonVal.isNull() ? dfltStr : jsonVal.toString();
@@ -80,9 +81,9 @@ QString jsonStrValue(const QJsonValue& jsonVal,
 int main()
 /**************************************************************************/
 /*!
-  
-  \brief  
-  
+
+  \brief
+
   {
   "barcode":"odqmts",
   "pi":"0000-0003-1655-297X",
@@ -121,12 +122,11 @@ int main()
   "proofCheckDataFileStat":0,
   "creator":null
   }
-  
+
 */
 {
   const QString fmtExtPrmName="%1::%2";
   const QString fmtNoPi="No name for authorized PI OrcId=%1";
-  const QString dir=idp2025RootDir+"input/dataset_lists/_latest/";
   const QStringList columnLbls=QStringList()
     << "GEOTRACES CRUISE"
     << "CRUISE"
@@ -139,30 +139,30 @@ int main()
     << "SUBMITTER"
     << "AUTORISED SCIENTIST"
     << "DATA GENERATOR(S)";
-  
+
   // nameReplacer.append("Abigail JR Smith","Abigail Smith");
   // nameReplacer.append("Tristan J. Horner","Tristan Horner");
   // nameReplacer.append("Timothy C Kenna","Timothy Kenna");
-  
-  QStringList sl=fileContents(dir+"gdac_DataList.json"),vals,keys,itemVals;
+
+  QStringList sl=fileContents(idpDataSetInpDir+"gdac_DataList.json"),vals,keys,itemVals;
   QJsonParseError jsonErr; QJsonValue jsonVal; QString msg;
   QJsonDocument jsonDoc=QJsonDocument::fromJson(sl.at(0).toUtf8(),&jsonErr);
   if (jsonDoc.isNull()) { msg=jsonErr.errorString(); return 1; }
   QJsonObject jsonDataset,jsonDocObj=jsonDoc.object();
   QJsonArray jsonDatasetArr=jsonDocObj.value("content").toArray();
-  
+
   QStringList scientistOrcids,scientistNames,scientistEmails;
   QMap<QString,QString> namesByOrcIds,emailsByOrcIds,extPrmNamesByUnknownOrcIds;
   QString orcId,submitterOrcId,submitterName,submitterEmail;
   QString authorizedOrcId; int i,j,n,datasetCount=jsonDatasetArr.size();
-  
+
   /* loop over all dataset entries and generate the name and email by OrcId maps */
   // namesByOrcIds.insert("0000-0003-2643-9567","Katrin Bluhm");
   // emailsByOrcIds.insert("0000-0003-2643-9567","katrin.bluhm@akvaplan.niva.no");
   for (i=0; i<datasetCount; ++i)
     {
       jsonDataset=jsonDatasetArr.at(i).toObject();
-      
+
       submitterOrcId=jsonStrValue(jsonDataset.value("pi"),"");
       submitterName=nameReplacer.applyTo(jsonStrValue(jsonDataset.value("name"),""));
       submitterEmail=jsonStrValue(jsonDataset.value("piEmail"),"");
@@ -173,7 +173,7 @@ int main()
           if (!submitterEmail.isEmpty())
             emailsByOrcIds.insert(submitterOrcId,submitterEmail);
         }
-      
+
       extractScientists(jsonDataset.value("scientists").toArray(),
                         &scientistOrcids,&scientistNames,&scientistEmails);
       for (j=0; j<scientistOrcids.size(); ++j)
@@ -185,7 +185,12 @@ int main()
             emailsByOrcIds.insert(orcId,scientistEmails.at(j));
         }
     }
-  
+
+  /* ensure that output directory exists */
+  QString diagnDir=idpDiagnDir+"datasets/";
+  QDir().mkpath(diagnDir);
+  QDir().mkpath(idpDataSetIntermDir);
+
   /* create file with name and email by OrcId */
   keys=namesByOrcIds.keys(); n=keys.size(); sl.clear();
   sl << "ORCID\tNAME\tEMAIL";
@@ -194,39 +199,39 @@ int main()
       sl << QString("%1\t%2\t%3").arg(keys.at(i))
         .arg(namesByOrcIds.value(keys.at(i))).arg(emailsByOrcIds.value(keys.at(i)));
     }
-  appendRecords(dir+"orcid_list.txt",sl,true);
-  
+  appendRecords(idpDataSetIntermDir+"orcid_list.txt",sl,true);
+
   /* loop over all dataset entries again and create output records. */
   QMap<QString,QStringList> datasetInfos; QString prmName,barcode,piPermission;
   for (i=0; i<datasetCount; ++i)
     {
       keys.clear(); vals.clear();
       jsonDataset=jsonDatasetArr.at(i).toObject();
-      
+
       submitterOrcId=jsonStrValue(jsonDataset.value("pi"),"");
       authorizedOrcId=jsonDataset.value("authorisedResearcherOrcid").toString();
-      
+
       /* if no authorized scientist but submitter exists: use
          submitter as authorized scientist */
       if (authorizedOrcId.isEmpty() && !submitterOrcId.isEmpty())
         authorizedOrcId=submitterOrcId;
-      
+
       extractScientists(jsonDataset.value("scientists").toArray(),
                         &scientistOrcids,&scientistNames,&scientistEmails);
-      
+
       /* if not already present, prepend the authorized scientist to
          the OrcID list of data generators */
       if (scientistOrcids.indexOf(authorizedOrcId)==-1)
           scientistOrcids.prepend(authorizedOrcId);
       scientistNames=namesFromOrcIDs(scientistOrcids,namesByOrcIds);
-      
+
       prmName=jsonDataset.value("parameter").toString();
       barcode=jsonDataset.value("barcode").toString();
       piPermission=jsonStrValue(jsonDataset.value("permissionToUseInIdp"));
       if      (piPermission=="true") piPermission="approved";
       else if (piPermission=="false") piPermission="not approved";
       else if (piPermission=="undefined") piPermission="pending";
-      
+
       keys << jsonStrValue(jsonDataset.value("geotracesCruise"),"");
       keys << jsonStrValue(jsonDataset.value("cruise"));
       keys << prmName+"::"+barcode;
@@ -240,26 +245,26 @@ int main()
       vals << (namesByOrcIds.contains(authorizedOrcId) ?
                namesByOrcIds.value(authorizedOrcId) : "_unknown authorized scientist_");
       vals << scientistNames.join(" | ");
-      
+
       datasetInfos.insert(keys.join(":"),keys+vals);
-      
+
       if (!namesByOrcIds.contains(authorizedOrcId))
         extPrmNamesByUnknownOrcIds.insert(authorizedOrcId,
                                           fmtExtPrmName.arg(prmName).arg(barcode));
     }
-  
+
   sl.clear(); sl << columnLbls.join("\t");
   QMap<QString,QStringList>::ConstIterator it;
   for (it=datasetInfos.constBegin(); it!=datasetInfos.constEnd(); ++it)
     { sl << it.value().join("\t"); }
-  appendRecords(dir+"gdac_DataList_essentials.txt",sl,true);
-  
-  sl.clear(); 
+  appendRecords(idpDataSetIntermDir+"gdac_DataList_essentials.txt",sl,true);
+
+  sl.clear();
   QMap<QString,QString>::ConstIterator its;
   for (its=extPrmNamesByUnknownOrcIds.constBegin();
        its!=extPrmNamesByUnknownOrcIds.constEnd(); ++its)
     { sl << QString("%1\t%2").arg(its.key()).arg(its.value()); }
-  appendRecords(idpDiagnosticsDir+"dataset_lists/UnknownOrcIds.txt",sl,true);
-  
+  appendRecords(diagnDir+"UnknownOrcIds.txt",sl,true);
+
   return 0;
 }

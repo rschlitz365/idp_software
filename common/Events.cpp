@@ -314,7 +314,7 @@ void EventsDB::diagnoseEventCorrections()
 
 */
 {
-  const QString dataDir=idpDataDir+"DISCRETE_DATA/";
+  const QString dataDir=idpDataInpDir+"DISCRETE_DATA/";
   EventsDB eventsDB(dataDir+"EVENTS.csv","BODC_EVENT_NUMBER",comma);
   EventsDB eventsCorr(idpInputDir+"data/_corrections/EVENTS_corrected.csv",
                       "BODC_EVENT_NUMBER",comma);
@@ -363,7 +363,7 @@ void EventsDB::diagnoseEventCorrections()
 
     }
 
-  const QString diagnosticsDir=idpDiagnosticsDir+"events/";
+  const QString diagnosticsDir=idpDiagnDir+"events/";
   QDir().mkpath(diagnosticsDir);
   appendRecords(diagnosticsDir+"EVENTS_corrections.txt",sl,true);
   appendRecords(diagnosticsDir+"EVENTS_no-change.txt",slU,true);

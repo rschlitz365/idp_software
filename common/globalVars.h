@@ -13,15 +13,16 @@
 /**global variables*******************************************************/
 const QChar tab=QChar('\t'),comma=QChar(',');
 
-const QString IDP2025RootDir="C:/GEOTRACES/IDP2025/";
-const QString idp2025RootDir="C:/GEOTRACES/IDP2025/";
-const QString idpInputDir=idp2025RootDir+"input/";
-const QString idpOutputDir=idp2025RootDir+"output/";
-const QString idpDataDir=idpInputDir+"data/_latest/";
-const QString idpDataSetDir=idpInputDir+"dataset_lists/_latest/";
-const QString idpParameterListDir=idpInputDir+"parameter_lists/_latest/";
-const QString idpParameterMiscDir=idpInputDir+"parameter_lists/misc/";
-const QString idpDiagnosticsDir=idpOutputDir+"diagnostics/";
+const QString idpRootDir="C:/GEOTRACES/IDP2025/";
+const QString idpInputDir=idpRootDir+"input/";
+const QString idpOutputDir=idpRootDir+"output/";
+const QString idpDiagnDir=idpRootDir+"diagnostics/";
+const QString idpIntermDir=idpRootDir+"intermediate/";
+const QString idpDataInpDir=idpInputDir+"data/";
+const QString idpDataSetInpDir=idpInputDir+"datasets/";
+const QString idpPrmListInpDir=idpInputDir+"parameters/";
+const QString idpDataSetIntermDir=idpIntermDir+"datasets/";
+const QString idpPrmListIntermDir=idpIntermDir+"parameters/";
 
 const QString aerosolPrmFileName="AEROSOL_parameters.txt";
 const QString bioGeotracesPrmFileName="BIO_GEOTRACES_parameters.txt";

@@ -36,7 +36,7 @@ int main()
 */
 {
   const bool unifyPrms=true;
-  const QString dataDir=idpDataDir+"DISCRETE_DATA/";
+  const QString dataDir=idpDataInpDir+"DISCRETE_DATA/";
   QString inFn,outFn;
 
   /* ************* LOADING *************** */
@@ -66,18 +66,18 @@ int main()
   eventsDB.autoCorrectStationLabels();
 
   /* load the PI information from file */
-  InfoMap piInfosByName(idpDataSetDir+"orcid_list.txt","NAME",tab);
+  InfoMap piInfosByName(idpDataSetInpDir+"orcid_list.txt","NAME",tab);
 
   /* load all IDP parameter definitions */
-  ParamDB params(idpParameterListDir);
+  ParamDB params(idpPrmListInpDir);
 
   /* load the key variable associations from file */
   inFn=(unifyPrms) ? "_UNIFIED_KEY_VARIABLES.txt" : "_KEY_VARIABLES.txt";
-  InfoMap keyVarsByDataVar(idpParameterListDir+inFn,"DATA VARIABLE",tab);
+  InfoMap keyVarsByDataVar(idpPrmListInpDir+inFn,"DATA VARIABLE",tab);
 
   /* load the DOoR dataset information from file */
-  QStringList ignoredDatasets=fileContents(idpDataSetDir+"datasets_ignore.txt");
-  DatasetInfos datasetInfos(idpDataSetDir+"gdac_DataList_essentials.txt",
+  QStringList ignoredDatasets=fileContents(idpDataSetInpDir+"datasets_ignore.txt");
+  DatasetInfos datasetInfos(idpDataSetInpDir+"gdac_DataList_essentials.txt",
                             "PARAMETER::BARCODE",tab,&ignoredDatasets);
 
   /* load data records, ignore records without S&I approval or PI permission */
@@ -99,7 +99,7 @@ int main()
 
   /* setup the IDP parameter set for CryosphereDT */
   ParamSet cryosphPrms(CryosphereDT,&params,&cryosphDataItems,&datasetInfos);
-  cryosphPrms.writeParamLists(idpOutputDir+"parameter_lists/","IDP2025_Parameters_Cryosphere");
+  cryosphPrms.writeParamLists(idpOutputDir+"parameters/","IDP2025_Parameters_Cryosphere");
 
   /* collate meta data and data and write to ODV spreadsheet file */
   outFn="GEOTRACES_IDP2025_Cryosphere_Data.txt";
@@ -122,7 +122,7 @@ int main()
 
   /* setup the IDP parameter set for PrecipitationDT */
   ParamSet precipPrms(PrecipitationDT,&params,&precipDataItems,&datasetInfos);
-  precipPrms.writeParamLists(idpOutputDir+"parameter_lists/","IDP2025_Parameters_Precipitation");
+  precipPrms.writeParamLists(idpOutputDir+"parameters/","IDP2025_Parameters_Precipitation");
 
   /* collate meta data and data and write to ODV spreadsheet file */
   outFn="GEOTRACES_IDP2025_Precipitation_Data.txt";
@@ -145,7 +145,7 @@ int main()
 
   /* setup the IDP parameter set for AerosolsDT */
   ParamSet aerosolPrms(AerosolsDT,&params,&aerosolDataItems,&datasetInfos);
-  aerosolPrms.writeParamLists(idpOutputDir+"parameter_lists/","IDP2025_Parameters_Aerosols");
+  aerosolPrms.writeParamLists(idpOutputDir+"parameters/","IDP2025_Parameters_Aerosols");
 
   /* collate meta data and data and write to ODV spreadsheet file */
   outFn="GEOTRACES_IDP2025_Aerosol_Data.txt";
@@ -170,7 +170,7 @@ int main()
   ParamSet seawaterPrms(SeawaterDT,&params,&seawaterDataItems,&datasetInfos,unifyPrms);
   // seawaterPrms.writeDescriptions(idpOutputDir+"diagnostics/seawater/",
   //                                "_UNIFIED_PARAMETER_DESCRIPTIONS.txt");
-  seawaterPrms.writeParamLists(idpOutputDir+"parameter_lists/","IDP2025_Parameters_Seawater");
+  seawaterPrms.writeParamLists(idpOutputDir+"parameters/","IDP2025_Parameters_Seawater");
 
   /* collate meta data and data and write to ODV spreadsheet file */
   outFn="GEOTRACES_IDP2025_Seawater_Discrete_Sample_Data.txt";

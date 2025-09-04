@@ -4,21 +4,20 @@
 # input for qmake.
 #
 #   - Produce Visual Studio project file
-#     qmake -tp vc door_parameter_parser_arm64.pro
+#     qmake -tp vc build_for_win-arm64.pro
 #
 #################################################################
 
 
-SOURCES     = door_parameter_parser.cpp
+SOURCES       = door_parameter_parser.cpp
+TARGET        = door_parameter_parser
 
-INCLUDEPATH += ../
+INCLUDEPATH  += ../
 
-TEMPLATE    = app
-QT          += xml
-QT          -= gui
+TEMPLATE      = app
+QT           += xml
+QT           -= gui
 
-win32 {
-	CONFIG		+= embed_manifest_exe
-	QMAKE_LFLAGS	+= /MACHINE:ARM64 /INCREMENTAL:NO
-	DEFINES		+= _CRT_SECURE_NO_WARNINGS
-}
+CONFIG       += embed_manifest_exe
+QMAKE_LFLAGS += /MACHINE:ARM64 /INCREMENTAL:NO
+DEFINES      += _CRT_SECURE_NO_WARNINGS

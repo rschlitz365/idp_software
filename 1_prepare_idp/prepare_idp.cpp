@@ -35,8 +35,8 @@ int main()
 
 */
 {
-  const QString dataDir=idpDataDir+"DISCRETE_DATA/";
-  const QString docOutDir=idp2025RootDir+"documents/IDP2025_documents/";
+  const QString dataDir=idpDataInpDir+"DISCRETE_DATA/";
+  const QString docOutDir=idpRootDir+"documents/idp/";
 
   QString dir,outDir,fn; QStringList sl,slP;
 
@@ -68,8 +68,8 @@ int main()
 
 
   /* load the DOoR dataset information from file */
-  QStringList ignoredDatasets=fileContents(idpDataSetDir+"datasets_ignore.txt");
-  DatasetInfos datasetInfos(idpDataSetDir+"gdac_DataList_essentials.txt",
+  QStringList ignoredDatasets=fileContents(idpDataSetInpDir+"datasets_ignore.txt");
+  DatasetInfos datasetInfos(idpDataSetInpDir+"gdac_DataList_essentials.txt",
                             "PARAMETER::BARCODE",tab,&ignoredDatasets);
 
 
@@ -113,10 +113,10 @@ int main()
   cryosphStats.writeSpreadsheetFile(dir,"IDP2025_Cryosphere_Stations.txt",&eventsDB);
 
 
-  dir=idpOutputDir+"dataset_lists/"; QDir().mkpath(dir);
+  dir=idpOutputDir+"datasets/"; QDir().mkpath(dir);
 
   /* create the IDP2025 contributor documents */
-  InfoMap scientistInfoByName(idpDataSetDir+"orcid_list.txt","NAME",tab);
+  InfoMap scientistInfoByName(idpDataSetInpDir+"orcid_list.txt","NAME",tab);
   QStringList scientistNames=datasetInfos.acceptedPrmsByContribNames.keys();
   QStringList sortedNamesFL=sortedNameList(scientistNames,false);
   QStringList sortedNamesLF=sortedNameList(scientistNames,true);
@@ -151,10 +151,10 @@ int main()
 
   fn=dataDir+"BOTTLE_DATA.csv";
 
-  dir=idpOutputDir+"parameter_lists/"; QDir().mkpath(dir);
+  dir=idpOutputDir+"parameters/"; QDir().mkpath(dir);
 
   /* load all IDP parameter definitions */
-  ParamDB params(idpParameterListDir);
+  ParamDB params(idpPrmListInpDir);
 
   /* setup the IDP parameter sets for all dataTypes taking into
      account S&I approvals and PI permissions */

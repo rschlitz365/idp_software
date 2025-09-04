@@ -836,7 +836,7 @@ ParamSet::ParamSet(IdpDataType dataType,ParamDB *params,
     << "Meltpond Pump";
 
   /* load ODV meta and lead data variable information */
-  const QString dir=idpInputDir+"odv_variable_lists/";
+  const QString dir=idpInputDir+"odv_variables/";
   metaVars.load(dir+"MetaVarList.txt");
   leadDataVars.load(dir+QString("LeadDataVarList_%1.txt")
                     .arg(dataTypeNameFromType(type)));
@@ -1112,7 +1112,7 @@ void ParamSet::unifyParameters(IdpDataType dataType)
   if ((i=unifySS.indexOf(Param::samplingSystemStr(SensorSS)))>-1)
     unifySS.removeAt(i);
 
-  InfoMap descrByUVar(idpParameterListDir
+  InfoMap descrByUVar(idpPrmListInpDir
                       +"_UNIFIED_PARAMETER_DESCRIPTIONS.txt",
                       "Parameter Name",tab);
 

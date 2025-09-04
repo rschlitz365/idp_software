@@ -26,8 +26,8 @@ MainWindow::MainWindow(QWidget *parent,char *prmType)
   : QMainWindow(parent)
 /**************************************************************************/
 {
-  const QString dataDir=idpDataDir+"DISCRETE_DATA/";
-  const QString outDir=idpOutputDir+"parameter_lists/";
+  const QString dataDir=idpDataInpDir+"DISCRETE_DATA/";
+  const QString outDir=idpOutputDir+"parameters/";
 
   setupUi(this);
 
@@ -36,8 +36,8 @@ MainWindow::MainWindow(QWidget *parent,char *prmType)
   QString dataTypeName=ParamSet::dataTypeNameFromType(dataType);
 
   /* load the DOoR dataset information */
-  QStringList ignoredDatasets=fileContents(idpDataSetDir+"datasets_ignore.txt");
-  DatasetInfos datasetInfos(idpDataSetDir+"gdac_DataList_essentials.txt",
+  QStringList ignoredDatasets=fileContents(idpDataSetInpDir+"datasets_ignore.txt");
+  DatasetInfos datasetInfos(idpDataSetInpDir+"gdac_DataList_essentials.txt",
                             "PARAMETER::BARCODE",tab,&ignoredDatasets);
 
   /* load the cruise information from file */
@@ -61,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent,char *prmType)
   DataItemList cryosphereDataItems(CryosphereDT,&dataItemsDB,&datasetInfos);
 
   /* load all parameter definitions */
-  ParamDB params(idpParameterListDir);
+  ParamDB params(idpPrmListInpDir);
 
   /* setup the IDP parameter sets for all dataTypes taking into
      account S&I approvals and PI permissions */
