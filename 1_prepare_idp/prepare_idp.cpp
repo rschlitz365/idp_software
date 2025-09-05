@@ -35,7 +35,7 @@ int main()
 
 */
 {
-  const QString dataDir=idpDataInpDir+"DISCRETE_DATA/";
+  const QString dataDir=idpDataInpDir+"discrete/";
   const QString docOutDir=idpRootDir+"documents/idp/";
 
   QString dir,outDir,fn; QStringList sl,slP;
@@ -47,14 +47,12 @@ int main()
   UnitConverter unitConverter(idpInputDir+"unit_conversions/unit_conversions.txt");
 
   /* load the bioGEOTRACES information */
-  InfoMap bioGeotracesInfos(idpInputDir+"biogeotraces/BioGEOTRACES_Omics_IDP2025.txt",
+  InfoMap bioGeotracesInfos(idpDataInpDir+"biogeotraces/BioGEOTRACES_Omics_IDP2025.txt",
                             "BODC Bottle Number",tab);
 
   /* load the bottle and cell data documentation information from file */
-  InfoMap docuByExtPrmName(dataDir+"BOTTLE_DATA_DOCUMENTATION.csv",
-                           "PARAMETER",comma);
-  docuByExtPrmName.insertFile(dataDir+"CELL_DATA_DOCUMENTATION.csv",
-                              "PARAMETER",comma);
+  InfoMap docuByExtPrmName(dataDir+"BOTTLE_DATA_DOCUMENTATION.csv","PARAMETER",comma);
+  docuByExtPrmName.insertFile(dataDir+"CELL_DATA_DOCUMENTATION.csv","PARAMETER",comma);
 
   /* load the cruise information from file */
   CruisesDB cruisesDB(dataDir+"CRUISES.csv","CRUISE",comma);
@@ -62,14 +60,14 @@ int main()
   /* load the event information from file */
   EventsDB::diagnoseEventCorrections();
   EventsDB eventsDB(dataDir+"EVENTS.csv","BODC_EVENT_NUMBER",comma);
-  eventsDB.insertFile(idpInputDir+"data/_corrections/EVENTS_corrected.csv",
+  eventsDB.insertFile(dataDir+"event_corrections/EVENTS_corrected.csv",
                       "BODC_EVENT_NUMBER",comma);
   eventsDB.autoCorrectStationLabels();
 
 
   /* load the DOoR dataset information from file */
   QStringList ignoredDatasets=fileContents(idpDataSetInpDir+"datasets_ignore.txt");
-  DatasetInfos datasetInfos(idpDataSetInpDir+"gdac_DataList_essentials.txt",
+  DatasetInfos datasetInfos(idpIntermDir+"datasets/gdac_DataList_essentials.txt",
                             "PARAMETER::BARCODE",tab,&ignoredDatasets);
 
 
@@ -90,33 +88,30 @@ int main()
   DataItemList cryosphDataItems(CryosphereDT,&dataItemsDB,&datasetInfos);
 
 
+  dir=idpDiagnDir+"stations/"; QDir().mkpath(dir);
 
   /* construct the station lists for all dataTypes */
   StationList seawaterStats=
-    eventsDB.collateStations(seawaterDataItems.acceptedEventNumbers.keys(),
-                             15.,5.,&eventsDB);
+    eventsDB.collateStations(seawaterDataItems.acceptedEventNumbers.keys(),15.,5.,&eventsDB);
   seawaterStats.writeSpreadsheetFile(dir,"IDP2025_Seawater_Stations.txt",&eventsDB);
 
   StationList aerosolStats=
-    eventsDB.collateStations(aerosolDataItems.acceptedEventNumbers.keys(),
-                             15.,1.,&eventsDB);
+    eventsDB.collateStations(aerosolDataItems.acceptedEventNumbers.keys(),15.,1.,&eventsDB);
   aerosolStats.writeSpreadsheetFile(dir,"IDP2025_Aerosols_Stations.txt",&eventsDB);
 
   StationList precipStats=
-    eventsDB.collateStations(precipDataItems.acceptedEventNumbers.keys(),
-                             15.,1.,&eventsDB);
+    eventsDB.collateStations(precipDataItems.acceptedEventNumbers.keys(),15.,1.,&eventsDB);
   precipStats.writeSpreadsheetFile(dir,"IDP2025_Precipitation_Stations.txt",&eventsDB);
 
   StationList cryosphStats=
-    eventsDB.collateStations(cryosphDataItems.acceptedEventNumbers.keys(),
-                             15.,1.,&eventsDB);
+    eventsDB.collateStations(cryosphDataItems.acceptedEventNumbers.keys(),15.,1.,&eventsDB);
   cryosphStats.writeSpreadsheetFile(dir,"IDP2025_Cryosphere_Stations.txt",&eventsDB);
 
 
   dir=idpOutputDir+"datasets/"; QDir().mkpath(dir);
 
   /* create the IDP2025 contributor documents */
-  InfoMap scientistInfoByName(idpDataSetInpDir+"orcid_list.txt","NAME",tab);
+  InfoMap scientistInfoByName(idpIntermDir+"datasets/orcid_list.txt","NAME",tab);
   QStringList scientistNames=datasetInfos.acceptedPrmsByContribNames.keys();
   QStringList sortedNamesFL=sortedNameList(scientistNames,false);
   QStringList sortedNamesLF=sortedNameList(scientistNames,true);
@@ -138,7 +133,8 @@ int main()
     }
   appendRecords(dir+"Contributing_Scientists.txt",sl,true);
   appendRecords(dir+"Contributing_Scientists_with_Parameters.txt",slP,true);
-  appendRecords(dir+"Unidentified_Contributing_Scientist_Names.txt",unidentifiedNames,true);
+  appendRecords(idpDiagnDir+"datasets/Unidentified_Contributing_Scientist_Names.txt",
+                unidentifiedNames,true);
 
   QMap<QString,QMap<QString,int> >::ConstIterator it; sl.clear();
   for (it=datasetInfos.acceptedContribNamesByPrms.constBegin();
@@ -154,7 +150,7 @@ int main()
   dir=idpOutputDir+"parameters/"; QDir().mkpath(dir);
 
   /* load all IDP parameter definitions */
-  ParamDB params(idpPrmListInpDir);
+  ParamDB params(idpIntermDir+"parameters/");
 
   /* setup the IDP parameter sets for all dataTypes taking into
      account S&I approvals and PI permissions */

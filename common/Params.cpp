@@ -844,7 +844,7 @@ ParamSet::ParamSet(IdpDataType dataType,ParamDB *params,
   /* load category priority list for this data type */
   const QString fmt="_category_priorities_%1.txt";
   QStringList categoryPriorities=
-    fileContents(paramDBPtr->inpDir+fmt.arg(dataTypeNameFromType(type)));
+    fileContents(idpInputDir+"parameters/"+fmt.arg(dataTypeNameFromType(type)));
 
   int i,j,k,m=methodPriorities.size(),n=categoryPriorities.size();
   QString method,category; ParamGroup group;

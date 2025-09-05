@@ -310,13 +310,13 @@ void EventsDB::diagnoseEventCorrections()
 /*!
 
   \brief Diagnoses the event corrections in file
-  data/_corrections/EVENTS_corrected.csv.
+  input/data/discrete/event_corrections/EVENTS_corrected.csv.
 
 */
 {
-  const QString dataDir=idpDataInpDir+"DISCRETE_DATA/";
+  const QString dataDir=idpDataInpDir+"discrete/";
   EventsDB eventsDB(dataDir+"EVENTS.csv","BODC_EVENT_NUMBER",comma);
-  EventsDB eventsCorr(idpInputDir+"data/_corrections/EVENTS_corrected.csv",
+  EventsDB eventsCorr(dataDir+"event_corrections/EVENTS_corrected.csv",
                       "BODC_EVENT_NUMBER",comma);
   QStringList sl,slC,slU,slP,corrEventNums=eventsCorr.keys();
   int i,n=corrEventNums.size(),idxDiff; InfoItem ii,iiC;
@@ -363,12 +363,11 @@ void EventsDB::diagnoseEventCorrections()
 
     }
 
-  const QString diagnosticsDir=idpDiagnDir+"events/";
-  QDir().mkpath(diagnosticsDir);
-  appendRecords(diagnosticsDir+"EVENTS_corrections.txt",sl,true);
-  appendRecords(diagnosticsDir+"EVENTS_no-change.txt",slU,true);
-  appendRecords(diagnosticsDir+"EVENTS_pos-change.txt",slP,true);
-  appendRecords(diagnosticsDir+"EVENTS_corrected.csv",slC,true);
+  const QString diagnDir=idpDiagnDir+"events/"; QDir().mkpath(diagnDir);
+  appendRecords(diagnDir+"EVENTS_corrections.txt",sl,true);
+  appendRecords(diagnDir+"EVENTS_no-change.txt",slU,true);
+  appendRecords(diagnDir+"EVENTS_pos-change.txt",slP,true);
+  appendRecords(diagnDir+"EVENTS_corrected.csv",slC,true);
 }
 
 /**************************************************************************/

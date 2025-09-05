@@ -332,7 +332,7 @@ void DataItemsDB::writeDiagnostics(CruisesDB *cruisesDBPtr)
 */
 {
   const QString fmt="%1\t%2\t%3\t%4\t%5\t%6 - %7\t%8";
-  const QString dir=idpOutputDir+"data/"; QDir().mkpath(dir);
+  const QString dir=idpDiagnDir+"data/"; QDir().mkpath(dir);
 
   appendRecords(dir+"DataItemsDB_error_messages.txt",errMsgs.keys(),true);
   appendRecords(dir+"DataItemsDB_accepted_cruises.txt",

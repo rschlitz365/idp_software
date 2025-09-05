@@ -264,7 +264,7 @@ int main()
   for (its=extPrmNamesByUnknownOrcIds.constBegin();
        its!=extPrmNamesByUnknownOrcIds.constEnd(); ++its)
     { sl << QString("%1\t%2").arg(its.key()).arg(its.value()); }
-  appendRecords(diagnDir+"UnknownOrcIds.txt",sl,true);
+  appendRecords(diagnDir+"Unnamed_OrcIds.txt",sl,true);
 
   return 0;
 }

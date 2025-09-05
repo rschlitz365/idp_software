@@ -36,7 +36,7 @@ int main()
 */
 {
   const bool unifyPrms=true;
-  const QString dataDir=idpDataInpDir+"DISCRETE_DATA/";
+  const QString dataDir=idpDataInpDir+"discrete/";
   QString inFn,outFn;
 
   /* ************* LOADING *************** */
@@ -61,7 +61,7 @@ int main()
   /* load the event information from file */
   EventsDB::diagnoseEventCorrections();
   EventsDB eventsDB(dataDir+"EVENTS.csv","BODC_EVENT_NUMBER",comma);
-  eventsDB.insertFile(idpInputDir+"data/_corrections/EVENTS_corrected.csv",
+  eventsDB.insertFile(dataDir+"event_corrections/EVENTS_corrected.csv",
                       "BODC_EVENT_NUMBER",comma);
   eventsDB.autoCorrectStationLabels();
 
@@ -69,7 +69,7 @@ int main()
   InfoMap piInfosByName(idpDataSetInpDir+"orcid_list.txt","NAME",tab);
 
   /* load all IDP parameter definitions */
-  ParamDB params(idpPrmListInpDir);
+  ParamDB params(idpIntermDir+"parameters/");
 
   /* load the key variable associations from file */
   inFn=(unifyPrms) ? "_UNIFIED_KEY_VARIABLES.txt" : "_KEY_VARIABLES.txt";
@@ -77,7 +77,7 @@ int main()
 
   /* load the DOoR dataset information from file */
   QStringList ignoredDatasets=fileContents(idpDataSetInpDir+"datasets_ignore.txt");
-  DatasetInfos datasetInfos(idpDataSetInpDir+"gdac_DataList_essentials.txt",
+  DatasetInfos datasetInfos(idpIntermDir+"datasets/gdac_DataList_essentials.txt",
                             "PARAMETER::BARCODE",tab,&ignoredDatasets);
 
   /* load data records, ignore records without S&I approval or PI permission */
