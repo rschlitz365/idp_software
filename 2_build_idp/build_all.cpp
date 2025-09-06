@@ -35,7 +35,7 @@ int main()
 
 */
 {
-  const bool unifyPrms=true;
+  // const bool unifyPrms=true;
   const QString dataDir=idpDataInpDir+"discrete/";
   QString inFn,outFn;
 
@@ -48,7 +48,7 @@ int main()
   UnitConverter unitConverter(idpInputDir+"unit_conversions/unit_conversions.txt");
 
   /* load the bioGEOTRACES information */
-  InfoMap bioGeotracesInfos(idpInputDir+"biogeotraces/BioGEOTRACES_Omics_IDP2025.txt",
+  InfoMap bioGeotracesInfos(idpDataInpDir+"biogeotraces/BioGEOTRACES_Omics_IDP2025.txt",
                             "BODC Bottle Number",tab);
 
   /* load the bottle and cell data documentation information from file */
@@ -71,9 +71,9 @@ int main()
   /* load all IDP parameter definitions */
   ParamDB params(idpIntermDir+"parameters/");
 
-  /* load the key variable associations from file */
-  inFn=(unifyPrms) ? "_UNIFIED_KEY_VARIABLES.txt" : "_KEY_VARIABLES.txt";
-  InfoMap keyVarsByDataVar(idpPrmListInpDir+inFn,"DATA VARIABLE",tab);
+  /* load the key variable associations from file, both unified and non-unified versions */
+  InfoMap keyVarsByDataVar(idpPrmListInpDir+"_KEY_VARIABLES.txt","DATA VARIABLE",tab);
+  InfoMap keyVarsByDataVarU(idpPrmListInpDir+"_UNIFIED_KEY_VARIABLES.txt","DATA VARIABLE",tab);
 
   /* load the DOoR dataset information from file */
   QStringList ignoredDatasets=fileContents(idpDataSetInpDir+"datasets_ignore.txt");
@@ -166,19 +166,35 @@ int main()
   seawaterStations.writeSpreadsheetFile(idpOutputDir+"stations/",
                                         "IDP2025_Seawater_Stations.txt",&eventsDB);
 
-  /* setup the IDP parameter set for SeawaterDT */
-  ParamSet seawaterPrms(SeawaterDT,&params,&seawaterDataItems,&datasetInfos,unifyPrms);
+
+  /* setup the IDP parameter set for SeawaterDT - non-unified parameters */
+  ParamSet seawaterPrms(SeawaterDT,&params,&seawaterDataItems,&datasetInfos,false);
   // seawaterPrms.writeDescriptions(idpOutputDir+"diagnostics/seawater/",
   //                                "_UNIFIED_PARAMETER_DESCRIPTIONS.txt");
   seawaterPrms.writeParamLists(idpOutputDir+"parameters/","IDP2025_Parameters_Seawater");
 
-  /* collate meta data and data and write to ODV spreadsheet file */
+  /* collate meta data and data and write to ODV spreadsheet file - non-unified parameters */
   outFn="GEOTRACES_IDP2025_Seawater_Discrete_Sample_Data.txt";
   seawaterPrms.writeDataAsSpreadsheet(&seawaterStations,&cruisesDB,
                                       &docuByExtPrmName,&bioGeotracesInfos,
                                       &piInfosByName,&keyVarsByDataVar,
                                       &unitConverter,&bottleFlagDescr,
                                       idpOutputDir+"data/seawater/",outFn);
+
+
+  /* setup the IDP parameter set for SeawaterDT - unified parameters */
+  ParamSet seawaterPrmsU(SeawaterDT,&params,&seawaterDataItems,&datasetInfos,true);
+  // seawaterPrms.writeDescriptions(idpOutputDir+"diagnostics/seawater/",
+  //                                "_UNIFIED_PARAMETER_DESCRIPTIONS.txt");
+  seawaterPrmsU.writeParamLists(idpOutputDir+"parameters/","IDP2025u_Parameters_Seawater");
+
+  /* collate meta data and data and write to ODV spreadsheet file - unified parameters */
+  outFn="GEOTRACES_IDP2025u_Seawater_Discrete_Sample_Data.txt";
+  seawaterPrmsU.writeDataAsSpreadsheet(&seawaterStations,&cruisesDB,
+                                       &docuByExtPrmName,&bioGeotracesInfos,
+                                       &piInfosByName,&keyVarsByDataVarU,
+                                       &unitConverter,&bottleFlagDescr,
+                                       idpOutputDir+"data/seawater-unified/",outFn);
 
   return 0;
 }

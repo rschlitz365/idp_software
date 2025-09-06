@@ -94,7 +94,7 @@ entries from file \a fn.
       siNpiY.append(value(extPrmName).join(tab));
   }
 
-  const QString dir=idpOutputDir+"datasets/"; QDir().mkpath(dir);
+  const QString dir=idpDiagnDir+"datasets/"; QDir().mkpath(dir);
 
   /* for diagnostics */
   appendRecords(dir+"SiApproved_PiPending.txt",siYpiP,true);
