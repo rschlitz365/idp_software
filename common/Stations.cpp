@@ -298,8 +298,12 @@ QStringList Station::spreadsheetRecords() const
 
 */
 {
-  StationInfo si(*this); QString s,statLbl=stationLabel();
-  QStringList sl; EventInfo ei; int i,n=size(); double sdvDist;
+  StationInfo si(*this); QString s,eventNumsStr,statLbl=stationLabel();
+  QStringList sl,el; EventInfo ei; int i,n=size(); double sdvDist;
+
+  for (i=0; i<n; ++i)
+    el << QString::number(eventInfos.at(i).eventNumber);
+  eventNumsStr=el.join(" | ");
 
   for (i=0; i<n; ++i)
     {
@@ -308,9 +312,9 @@ QStringList Station::spreadsheetRecords() const
         ODV::missDOUBLE : distance(si.meanLon,si.meanLat,
                                    si.meanLon+si.sdvLon,si.meanLat-si.sdvLat);
 
-      s=QString("%1\t%2\tB\t%3\t%4\t%5\t%6\t%7\t%8\t%9\t%10\t%11\t%12\t%13\t%14\t%15\t%16\t%17\t")
+      s=QString("%1\t%2\tB\t%3\t%4\t%5\t%6\t%7\t%8\t%9\t%10\t%11\t%12\t%13\t%14\t%15\t%16\t%17\t%17\t%18\t")
         .arg(cruiseLbl).arg(statLbl).arg(isoDateFromGregorianDay(si.meanTime))
-        .arg(si.meanLon).arg(si.meanLat).arg(si.maxBotd)
+        .arg(si.meanLon).arg(si.meanLat).arg(si.maxBotd).arg(eventNumsStr)
         .arg(si.sdvTime).arg(sdvDist).arg(si.sdvLon).arg(si.sdvLat)
         .arg(si.sdvBotd).arg(ei.eventNumber)
         .arg(si.sdvTime).arg(sdvDist).arg(si.sdvLon).arg(si.sdvLat).arg(si.sdvBotd);
@@ -442,5 +446,3 @@ void StationList::writeSpreadsheetFile(const QString& dir,const QString& fn,
   appendRecords(dir+fn,eventsDB->spreadsheetHeader(),true);
   appendRecords(dir+fn,spreadsheetRecords(),false);
 }
-
-

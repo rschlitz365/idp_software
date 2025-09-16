@@ -31,12 +31,11 @@ int main()
 /**************************************************************************/
 /*!
 
-  \brief Loads all inputs and performs various test for the IDP2025 creation.
+  \brief Loads all inputs and performs various test for the IDP creation.
 
 */
 {
   const QString dataDir=idpDataInpDir+"discrete/";
-  const QString docOutDir=idpRootDir+"documents/idp/";
 
   QString dir,outDir,fn; QStringList sl,slP;
 
@@ -47,7 +46,7 @@ int main()
   UnitConverter unitConverter(idpInputDir+"unit_conversions/unit_conversions.txt");
 
   /* load the bioGEOTRACES information */
-  InfoMap bioGeotracesInfos(idpDataInpDir+"biogeotraces/BioGEOTRACES_Omics_IDP2025.txt",
+  InfoMap bioGeotracesInfos(idpDataInpDir+"biogeotraces/BioGEOTRACES_Omics.txt",
                             "BODC Bottle Number",tab);
 
   /* load the bottle and cell data documentation information from file */
@@ -71,11 +70,6 @@ int main()
                             "PARAMETER::BARCODE",tab,&ignoredDatasets);
 
 
-  /* write the cruises information file */
-  appendRecords(docOutDir+"IDP2025_Cruises.txt",
-                datasetInfos.toCruisesStringList(&cruisesDB),true);
-
-
   /* load all data records and set the accepted status */
   DataItemsDB dataItemsDB(dataDir+"BOTTLE_DATA.csv",comma,&datasetInfos,&eventsDB);
   dataItemsDB.appendFile(dataDir+"CELL_DATA.csv",comma);
@@ -93,48 +87,29 @@ int main()
   /* construct the station lists for all dataTypes */
   StationList seawaterStats=
     eventsDB.collateStations(seawaterDataItems.acceptedEventNumbers.keys(),15.,5.,&eventsDB);
-  seawaterStats.writeSpreadsheetFile(dir,"IDP2025_Seawater_Stations.txt",&eventsDB);
+  seawaterStats.writeSpreadsheetFile(dir,"Seawater_Stations.txt",&eventsDB);
 
   StationList aerosolStats=
     eventsDB.collateStations(aerosolDataItems.acceptedEventNumbers.keys(),15.,1.,&eventsDB);
-  aerosolStats.writeSpreadsheetFile(dir,"IDP2025_Aerosols_Stations.txt",&eventsDB);
+  aerosolStats.writeSpreadsheetFile(dir,"Aerosol_Stations.txt",&eventsDB);
 
   StationList precipStats=
     eventsDB.collateStations(precipDataItems.acceptedEventNumbers.keys(),15.,1.,&eventsDB);
-  precipStats.writeSpreadsheetFile(dir,"IDP2025_Precipitation_Stations.txt",&eventsDB);
+  precipStats.writeSpreadsheetFile(dir,"Precipitation_Stations.txt",&eventsDB);
 
   StationList cryosphStats=
     eventsDB.collateStations(cryosphDataItems.acceptedEventNumbers.keys(),15.,1.,&eventsDB);
-  cryosphStats.writeSpreadsheetFile(dir,"IDP2025_Cryosphere_Stations.txt",&eventsDB);
+  cryosphStats.writeSpreadsheetFile(dir,"Cryosphere_Stations.txt",&eventsDB);
 
 
   dir=idpOutputDir+"datasets/"; QDir().mkpath(dir);
 
+  /* write the cruises information file */
+  appendRecords(dir+"Cruises.txt",datasetInfos.toCruisesStringList(&cruisesDB),true);
+
   /* create the IDP2025 contributor documents */
   InfoMap scientistInfoByName(idpIntermDir+"datasets/orcid_list.txt","NAME",tab);
-  QStringList scientistNames=datasetInfos.acceptedPrmsByContribNames.keys();
-  QStringList sortedNamesFL=sortedNameList(scientistNames,false);
-  QStringList sortedNamesLF=sortedNameList(scientistNames,true);
-  int i,n=scientistNames.size(); QMap<QString,int> prmNameMap;
-  QString scientistNameFL,scientistNameLF; InfoItem ii;
-  QStringList unidentifiedNames;
-  for (i=0; i<n; ++i)
-    {
-      scientistNameFL=sortedNamesFL.at(i);
-      scientistNameLF=sortedNamesLF.at(i);
-      if (!scientistInfoByName.contains(scientistNameFL))
-        { unidentifiedNames.append(scientistNameFL); continue; }
-
-      ii=scientistInfoByName.value(scientistNameFL);
-      prmNameMap=datasetInfos.acceptedPrmsByContribNames.value(scientistNameFL);
-      sl << QString("%1\t%2\t%3").arg(scientistNameLF).arg(ii.at(0)).arg(ii.at(2));
-      slP << QString();
-      slP << QString("%1\t%2").arg(scientistNameLF).arg(prmNameMap.keys().join(" | "));
-    }
-  appendRecords(dir+"Contributing_Scientists.txt",sl,true);
-  appendRecords(dir+"Contributing_Scientists_with_Parameters.txt",slP,true);
-  appendRecords(idpDiagnDir+"datasets/Unidentified_Contributing_Scientist_Names.txt",
-                unidentifiedNames,true);
+  datasetInfos.writeContributingScientistsInfo(scientistInfoByName);
 
   QMap<QString,QMap<QString,int> >::ConstIterator it; sl.clear();
   for (it=datasetInfos.acceptedContribNamesByPrms.constBegin();
@@ -154,14 +129,16 @@ int main()
 
   /* setup the IDP parameter sets for all dataTypes taking into
      account S&I approvals and PI permissions */
-  ParamSet seawaterPrms(SeawaterDT,&params,&seawaterDataItems,&datasetInfos);
-  seawaterPrms.writeParamLists(dir,"IDP2025_Parameters_Seawater");
+  ParamSet seawaterPrms(SeawaterDT,&params,&seawaterDataItems,&datasetInfos,false);
+  seawaterPrms.writeParamLists(dir,"Seawater_Parameters");
+  ParamSet seawaterPrmsU(SeawaterDT,&params,&seawaterDataItems,&datasetInfos,true);
+  seawaterPrmsU.writeParamLists(idpOutputDir+"parameters/","Seawater_Parameters_unified");
   ParamSet aerosolPrms(AerosolsDT,&params,&aerosolDataItems,&datasetInfos);
-  aerosolPrms.writeParamLists(dir,"IDP2025_Parameters_Aerosols");
+  aerosolPrms.writeParamLists(dir,"Aerosol_Parameters");
   ParamSet precipPrms(PrecipitationDT,&params,&precipDataItems,&datasetInfos);
-  precipPrms.writeParamLists(dir,"IDP2025_Parameters_Precipitation");
+  precipPrms.writeParamLists(dir,"Precipitation_Parameters");
   ParamSet cryosphPrms(CryosphereDT,&params,&cryosphDataItems,&datasetInfos);
-  cryosphPrms.writeParamLists(dir,"IDP2025_Parameters_Cryosphere");
+  cryosphPrms.writeParamLists(dir,"Cryosphere_Parameters");
 
 
   /* validate units in the data items against units of parameters */

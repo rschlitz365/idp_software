@@ -13,7 +13,12 @@
 /**global variables*******************************************************/
 const QChar tab=QChar('\t'),comma=QChar(',');
 
+const QString idpName="IDP2025";
 const QString idpRootDir="C:/GEOTRACES/IDP2025/";
+
+// const QString idpName="IDP2021v2";
+// const QString idpRootDir="C:/GEOTRACES/IDP2021_unified/";
+
 const QString idpInputDir=idpRootDir+"input/";
 const QString idpOutputDir=idpRootDir+"output/";
 const QString idpDiagnDir=idpRootDir+"diagnostics/";

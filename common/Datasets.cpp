@@ -215,4 +215,39 @@ QStringList DatasetInfos::toCruisesStringList(CruisesDB *cruises)
   return sl;
 }
 
+/**************************************************************************/
+void DatasetInfos::writeContributingScientistsInfo(const InfoMap& piInfosByName)
+/**************************************************************************/
+/*!
 
+\brief Writes the contributing scientists information to files.
+
+*/
+{
+  const QString dir=idpOutputDir+"datasets/";
+  QDir().mkpath(dir); QDir().mkpath(idpDiagnDir+"datasets/");
+
+  QStringList scientistNames=acceptedPrmsByContribNames.keys();
+  QStringList sortedNamesFL=sortedNameList(scientistNames,false);
+  QStringList sortedNamesLF=sortedNameList(scientistNames,true);
+  int i,n=scientistNames.size(); QMap<QString,int> prmNameMap;
+  QString scientistNameFL,scientistNameLF; InfoItem ii;
+  QStringList unidentifiedNames,sl,slP;
+  for (i=0; i<n; ++i)
+    {
+      scientistNameFL=sortedNamesFL.at(i);
+      scientistNameLF=sortedNamesLF.at(i);
+      if (!piInfosByName.contains(scientistNameFL))
+        { unidentifiedNames.append(scientistNameFL); continue; }
+
+      ii=piInfosByName.value(scientistNameFL);
+      prmNameMap=acceptedPrmsByContribNames.value(scientistNameFL);
+      sl << QString("%1\t%2\t%3").arg(scientistNameLF).arg(ii.at(0)).arg(ii.at(2));
+      slP << QString();
+      slP << QString("%1\t%2").arg(scientistNameLF).arg(prmNameMap.keys().join(" | "));
+    }
+  appendRecords(dir+"Contributing_Scientists.txt",sl,true);
+  appendRecords(dir+"Contributing_Scientists_with_Parameters.txt",slP,true);
+  appendRecords(idpDiagnDir+"datasets/Unidentified_Contributing_Scientist_Names.txt",
+                unidentifiedNames,true);
+}

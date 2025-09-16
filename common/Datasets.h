@@ -38,6 +38,7 @@ public:
   bool isRemovedDataset(const QString& cruise,const QString& prmName);
   QMap<QString,QString>* sectionsByCruisePtr() { return &sectsByCruiseName; }
   QStringList toCruisesStringList(CruisesDB *cruises);
+  void writeContributingScientistsInfo(const InfoMap& piInfosByName);
 
   int idxCruise,idxGeotracesCruise,idxPrmBarcode,idxSiApproval,idxPiPermission;
   int idxDataGenerator,idxAuthorisedScientist,idxIdpVersion;

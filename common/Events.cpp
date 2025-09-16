@@ -460,6 +460,8 @@ QStringList EventsDB::spreadsheetHeader()
   /* write //<MetaVariable> and //<DataVariable> lines */
   sl << fmtMvDef.arg("Station").arg("METASTATION")
     .arg("INDEXED_TEXT").arg("0").arg("");
+  sl << fmtMvDef.arg("BODC Event Numbers").arg("METABASIC")
+    .arg("INDEXED_TEXT").arg("0").arg("List of BODC event numbers in this station");
   sl << fmtMvDef.arg("StDev Time [days]").arg("METABASIC")
     .arg("FLOAT").arg("4").arg("");
   sl << fmtMvDef.arg("StDev Distance [km]").arg("METABASIC")
@@ -478,7 +480,7 @@ QStringList EventsDB::spreadsheetHeader()
 
   /* write header line */
   sl << "";
-  sl << "Cruise\tStation\tType\tyyyy-mm-ddThh:mm:ss.sss\tLongitude [degrees_east]\tLatitude [degrees_north]\tBot. Depth [m]\tStDev Time [days]\tStDev Distance [km]\tStDev Longitude [degrees]\tStDev Latitude [degrees]\tStDev Bot. Depth [m]\tBODC_EVENT_NUMBER\t*StDev Time [days]\t*StDev Distance [km]\t*StDev Longitude [degrees]\t*StDev Latitude [degrees]\t*StDev Bot. Depth [m]\t"+colLbls.join("\t");
+  sl << "Cruise\tStation\tType\tyyyy-mm-ddThh:mm:ss.sss\tLongitude [degrees_east]\tLatitude [degrees_north]\tBot. Depth [m]\tBODC Event Numbers\tStDev Time [days]\tStDev Distance [km]\tStDev Longitude [degrees]\tStDev Latitude [degrees]\tStDev Bot. Depth [m]\tBODC_EVENT_NUMBER\t*StDev Time [days]\t*StDev Distance [km]\t*StDev Longitude [degrees]\t*StDev Latitude [degrees]\t*StDev Bot. Depth [m]\t"+colLbls.join("\t");
 
   return sl;
 }

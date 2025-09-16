@@ -39,7 +39,8 @@ DataItem::DataItem(DataItemsDB *dataItemDB,const QString& line,QChar splitChar)
   eventNumber=extractedInt(sl.at(dataItemDB->idxEventNumber));
   bodcBottleNumber=extractedInt(sl.at(dataItemDB->idxBottleNumber));
   rosetteBottleNumber=extractedInt(sl.at(dataItemDB->idxRosetteBottleNumber));
-  subSampleNumber=extractedInt(sl.at(dataItemDB->idxSubSampleId));
+  subSampleNumber=(dataItemDB->idxSubSampleId>-1) ?
+    extractedInt(sl.at(dataItemDB->idxSubSampleId)) : -1;
   cellSampleId=sl.at(dataItemDB->idxcellSampleId);
   geotracesSampleId=sl.at(dataItemDB->idxGeotracesSampleId);
   bodcBottleFlag=sl.at(dataItemDB->idxBottleFlag).at(0).toLatin1();
