@@ -677,6 +677,26 @@ int indexOfFirstDiff(const QString& str,const QString& strC)
 }
 
 /**************************************************************************/
+int indexOfSampleDevice(const QList<QPair<QString,int> >& ssLst,
+                        const QString& smplDev)
+/**************************************************************************/
+/*!
+
+  \brief Determines the 0-based index of the first occurance sampling
+  device string \a smplDev as first part in the list \a ssLst.
+
+  \return The determined index, or \c -1 if no match is found.
+
+*/
+{
+  int i,n=ssLst.size();
+  for (i=0; i<n; ++i)
+    if (ssLst.at(i).first==smplDev) return i;
+
+  return -1;
+}
+
+/**************************************************************************/
 void indexx(int n,double arrin[],int indx[])
 /**************************************************************************/
 /*!

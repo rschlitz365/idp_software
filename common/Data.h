@@ -109,6 +109,9 @@ public:
   { return dataItemsDBPtr->acceptedPrmNames.contains(prmName); }
   DataItem itemAt(int idx);
   void validateUnits(ParamSet *paramSet);
+  void updateSampleDeviceCounts(QMap<QString,QList<QPair<QString,int> > >& smplDevs,
+                                const QString& key,const QString& smplDev);
+  void writeSamplingSystems(const QString fn,EventsDB *eventsDB);
 
   IdpDataType type;              //!< data type
   DataItemsDB *dataItemsDBPtr;   //!< pointer to parent DataItemsDB

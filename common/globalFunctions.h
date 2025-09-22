@@ -51,6 +51,7 @@ void generateBaseNameFileList(const QString dir,const QString fSpec,QStringList&
 void generateFileList(const QString rootDir,const QString fSpec,
                       bool doRecurse,QStringList& sl);
 int indexOfFirstDiff(const QString& str,const QString& strC);
+int indexOfSampleDevice(const QList<QPair<QString,int> >& ssLst,const QString& smplDev);
 void indexx(int n,double arrin[],int indx[]);
 QList<int> intListFromStr(const QString& str,const QString& splitStr);
 QString md5Hash(const QString& filePath);

@@ -70,7 +70,7 @@ int main()
                             "PARAMETER::BARCODE",tab,&ignoredDatasets);
 
 
-  /* load all data records and set the accepted status */
+  /* load all accepted data records */
   DataItemsDB dataItemsDB(dataDir+"BOTTLE_DATA.csv",comma,&datasetInfos,&eventsDB);
   dataItemsDB.appendFile(dataDir+"CELL_DATA.csv",comma);
   dataItemsDB.writeDiagnostics(&cruisesDB);
@@ -81,6 +81,12 @@ int main()
   DataItemList precipDataItems(PrecipitationDT,&dataItemsDB,&datasetInfos);
   DataItemList cryosphDataItems(CryosphereDT,&dataItemsDB,&datasetInfos);
 
+  /* determine the sampling system strings grouped by parameter sampling suffixes */
+  dir=idpDiagnDir+"parameters/"; QDir().mkpath(dir);
+  seawaterDataItems.writeSamplingSystems(dir+"Seawater_SamplingSystems.txt",&eventsDB);
+  aerosolDataItems.writeSamplingSystems(dir+"Aerosol_SamplingSystems.txt",&eventsDB);
+  precipDataItems.writeSamplingSystems(dir+"Precipitation_SamplingSystems.txt",&eventsDB);
+  cryosphDataItems.writeSamplingSystems(dir+"Cryosphere_SamplingSystems.txt",&eventsDB);
 
   dir=idpDiagnDir+"stations/"; QDir().mkpath(dir);
 

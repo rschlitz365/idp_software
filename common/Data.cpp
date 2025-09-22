@@ -497,4 +497,80 @@ void DataItemList::validateUnits(ParamSet *paramSet)
   appendRecords(dir+fn,bu.keys(),true);
 }
 
+/**************************************************************************/
+void DataItemList
+::updateSampleDeviceCounts(QMap<QString,QList<QPair<QString,int> > >& smplDevs,
+                           const QString& key,const QString& smplDev)
+/**************************************************************************/
+/*!
 
+  \brief .
+
+*/
+{
+  int idx; QList<QPair<QString,int> > ssLst;
+
+  if (smplDevs.contains(key))
+    {
+      ssLst=smplDevs.value(key);
+      idx=indexOfSampleDevice(ssLst,smplDev);
+      if (idx==-1)
+        ssLst << QPair<QString,int>(smplDev,1);
+      else
+        ssLst[idx].second=ssLst.at(idx).second+1;
+    }
+  else
+    {
+      ssLst.clear(); ssLst << QPair<QString,int>(smplDev,1);
+    }
+
+  smplDevs.insert(key,ssLst);
+}
+
+/**************************************************************************/
+void DataItemList::writeSamplingSystems(const QString fn,EventsDB *eventsDB)
+/**************************************************************************/
+/*!
+
+  \brief Extracts the sampling device strings and occurence counts per
+  parameter name and parameter suffix and writes results to fil \a fn.
+
+*/
+{
+  int i,idx,n=idxIntoDataItemDB.size(); QList<QPair<QString,int> > ssLst;
+  QString prmName,smplSys; ParamSamplingSystem ss; QStringList sl,pl;
+  QMap<QString,QList<QPair<QString,int> > > smplSystemByPrm,smplSystemBySmplSys;
+
+  DataItem di; EventInfo ei;
+  for (i=0; i<n; ++i)
+    {
+      idx=idxIntoDataItemDB.at(i); di=dataItemsDBPtr->at(idx);
+      prmName=Param::paramNameFromExtendedName(di.parameter);
+      ss=Param::samplingSystem(prmName); smplSys=Param::samplingSystemStr(ss);
+      ei=eventsDB->eventInfoOf(QString::number(di.eventNumber));
+
+      updateSampleDeviceCounts(smplSystemByPrm,prmName,ei.samplingDevice);
+      updateSampleDeviceCounts(smplSystemBySmplSys,smplSys,ei.samplingDevice);
+    }
+
+    QMap<QString,QList<QPair<QString,int> > >::ConstIterator it; sl.clear();
+    for (it=smplSystemBySmplSys.constBegin();
+         it!=smplSystemBySmplSys.constEnd(); ++it)
+      {
+        ssLst=it.value(); n=ssLst.size(); pl.clear();
+        for (i=0; i<n; ++i) pl << QString("%1 (%2)").arg(ssLst.at(i).first).arg(ssLst.at(i).second);
+        sl << QString("%1\t%2").arg(it.key()).arg(pl.join(" | "));
+      }
+    sl << QString("");
+
+    QMap<QString,QList<QPair<QString,int> > >::ConstIterator it1;
+    for (it1=smplSystemByPrm.constBegin();
+         it1!=smplSystemByPrm.constEnd(); ++it1)
+      {
+        ssLst=it1.value(); n=ssLst.size(); pl.clear();
+        for (i=0; i<n; ++i) pl << QString("%1 (%2)").arg(ssLst.at(i).first).arg(ssLst.at(i).second);
+        sl << QString("%1\t%2").arg(it1.key()).arg(pl.join(" | "));
+      }
+
+  appendRecords(fn,sl,true);
+}
