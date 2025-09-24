@@ -6,8 +6,9 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-
 #include "Events.h"
+
+#include <math.h>
 
 #include <QDir>
 // #include <QFile>

@@ -26,7 +26,7 @@ UnitConverter::UnitConverter(const QString& fn)
 {
   /* append "As provided." conversion at index 0 */
   append("<any>","<any>","<any>","1.","0.","As provided.");
-  
+
   /* append unit conversions from file fn */
   QFile f(fn); if (!f.exists() || !f.open(QIODevice::ReadOnly)) return;
   QTextStream in(&f); in.setCodec("UTF-8");
@@ -129,21 +129,21 @@ int UnitConverter::writeSortedListToFile(const QString& fn)
 	.arg(fac.at(i)).arg(off.at(i)).arg(descr.at(i));
       cnvs.insert(key,entry);
     }
-  
+
   /* open the file for writing, create output stream and write header line */
   QFile fi(fn); if (!fi.open(QIODevice::Text | QIODevice::WriteOnly)) return 0;
   QTextStream out(&fi);
-  out << QString("Variable\tFrom\tTo\tCnvFac\tCnvOff\tText") << endl;
+  out << QString("Variable\tFrom\tTo\tCnvFac\tCnvOff\tText") << Qt::endl;
 
   /* iterate over cnvs and write conversions to file fn */
   QString ele,lastEle; QMap<QString,QString>::const_iterator it=cnvs.constBegin();
   while (it!=cnvs.constEnd())
     {
       ele=it.key(); i=ele.indexOf('_'); if (i>-1) ele=ele.left(i);
-      if (ele!=lastEle) { out << endl; lastEle=ele; }
+      if (ele!=lastEle) { out << Qt::endl; lastEle=ele; }
 
-      out << it.value() << endl; ++it;
+      out << it.value() << Qt::endl; ++it;
     }
-  
+
   return n;
 }

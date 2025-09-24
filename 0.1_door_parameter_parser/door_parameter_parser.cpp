@@ -47,7 +47,7 @@ bool appendRecords(const QString& fn,const QStringList& records,
   /* output the text */
   QStringListIterator it(records);
   while (it.hasNext())
-    out << it.next() << endl;
+    out << it.next() << Qt::endl;
 
   return true;
 }
