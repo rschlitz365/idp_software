@@ -326,13 +326,13 @@ QStringList dataGeneratorNameList(const QString& str,const QString& splitStr)
 {
   QStringList sl=str.split(splitStr),dgnLst; int i,n=sl.size(); QString s;
   for (i=0; i<n; ++i)
-  {
-    s=sl.at(i).trimmed();
-    if (s.endsWith(" | ")) { s.chop(3); s=s.trimmed(); }
-    if (s.endsWith(" |"))  { s.chop(2); s=s.trimmed(); }
-    if (s.endsWith("| "))  { s.chop(2); s=s.trimmed(); }
-    if (!s.isEmpty()) dgnLst << s;
-  }
+    {
+      s=sl.at(i).trimmed();
+      if (s.endsWith(" | ")) { s.chop(3); s=s.trimmed(); }
+      if (s.endsWith(" |"))  { s.chop(2); s=s.trimmed(); }
+      if (s.endsWith("| "))  { s.chop(2); s=s.trimmed(); }
+      if (!s.isEmpty()) dgnLst << s;
+    }
   return dgnLst;
 }
 

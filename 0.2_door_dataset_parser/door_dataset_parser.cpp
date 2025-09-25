@@ -33,14 +33,17 @@ void extractScientists(const QJsonArray& scientistsArr,
 
 */
 {
-  int i,n=scientistsArr.size(); QJsonObject scientist;
+  int i,n=scientistsArr.size(); QJsonObject scientist; QString orcid;
   scientistOrcids->clear(); scientistNames->clear(); scientistEmails->clear();
   for (i=0; i<n; ++i)
     {
       scientist=scientistsArr.at(i).toObject();
-      scientistOrcids->append(scientist.value("orcid").toString().simplified());
-      scientistNames->append(nameReplacer.applyTo(scientist.value("name").toString()));
-      scientistEmails->append(scientist.value("email").toString());
+      orcid=scientist.value("orcid").toString().simplified();
+      if (orcid.startsWith("XXXX-")) continue;
+
+      scientistOrcids->append(orcid);
+      scientistNames->append(nameReplacer.applyTo(scientist.value("name").toString().simplified()));
+      scientistEmails->append(scientist.value("email").toString().simplified());
     }
 }
 
@@ -74,7 +77,7 @@ QString jsonStrValue(const QJsonValue& jsonVal,
 
 */
 {
-  return jsonVal.isNull() ? dfltStr : jsonVal.toString();
+  return (jsonVal.isNull() ? dfltStr : jsonVal.toString()).simplified();
 }
 
 /**************************************************************************/
@@ -209,7 +212,7 @@ int main()
       jsonDataset=jsonDatasetArr.at(i).toObject();
 
       submitterOrcId=jsonStrValue(jsonDataset.value("pi"),"");
-      authorizedOrcId=jsonDataset.value("authorisedResearcherOrcid").toString();
+      authorizedOrcId=jsonDataset.value("authorisedResearcherOrcid").toString().simplified();
 
       /* if no authorized scientist but submitter exists: use
          submitter as authorized scientist */
@@ -225,12 +228,20 @@ int main()
           scientistOrcids.prepend(authorizedOrcId);
       scientistNames=namesFromOrcIDs(scientistOrcids,namesByOrcIds);
 
-      prmName=jsonDataset.value("parameter").toString();
-      barcode=jsonDataset.value("barcode").toString();
-      piPermission=jsonStrValue(jsonDataset.value("permissionToUseInIdp"));
+      prmName=jsonDataset.value("parameter").toString().simplified();
+      barcode=jsonDataset.value("barcode").toString().simplified();
+      piPermission=jsonStrValue(jsonDataset.value("permissionToUseInIdp")).simplified();
       if      (piPermission=="true") piPermission="approved";
       else if (piPermission=="false") piPermission="not approved";
       else if (piPermission=="undefined") piPermission="pending";
+
+      //debug start
+      // int dmy;
+      // if (barcode=="hkqyhq" && prmName=="DIC_13_12_D_DELTA_BOTTLE")
+      // QString dmy=scientistNames.join(" | ");;
+      // if (dmy.size()<5)
+      //   dmy=1;
+      //debug end
 
       keys << jsonStrValue(jsonDataset.value("geotracesCruise"),"");
       keys << jsonStrValue(jsonDataset.value("cruise"));

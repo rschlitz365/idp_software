@@ -399,8 +399,20 @@ EventInfo EventsDB::eventInfoOf(const InfoItem& ii)
       ei.latitude=extractedDouble(ii.at(idxLatitude));
       ei.bottomDepth=extractedDouble(ii.at(idxBottomDepth));
 
+      /* if start and end lon/lat coordinates exist calculate the event
+        position as arithmetic means. if start and end longitues have
+        different sign and the difference is bigger than 180 degrees,
+        adjust the negative one to become positive */
       if (ei.startLongitude!=ODV::missDOUBLE && ei.endLongitude!=ODV::missDOUBLE)
-        ei.longitude=0.5*(ei.startLongitude+ei.endLongitude);
+        {
+          if ((ei.startLongitude*ei.endLongitude)<0. &&
+              fabs(ei.startLongitude-ei.endLongitude)>180.)
+            {
+              if (ei.startLongitude<0.) ei.startLongitude+=360.;
+              if (ei.endLongitude<0.) ei.endLongitude+=360.;
+            }
+          ei.longitude=0.5*(ei.startLongitude+ei.endLongitude);
+        }
       if (ei.startLatitude!=ODV::missDOUBLE && ei.endLatitude!=ODV::missDOUBLE)
         ei.latitude=0.5*(ei.startLatitude+ei.endLatitude);
     }

@@ -15,6 +15,7 @@
 #include "globalFunctions.h"
 #include "Cruises.h"
 
+#include "common/odv.h"
 
 
 /**************************************************************************/
@@ -34,6 +35,7 @@ entries from file \a fn.
   idxCruise=columnIndexOf("CRUISE");
   idxGeotracesCruise=columnIndexOf("GEOTRACES CRUISE");
   idxPrmBarcode=columnIndexOf("PARAMETER::BARCODE");
+  idxGdacDatasetId=columnIndexOf("GDAC DATASET ID");
   idxSiApproval=columnIndexOf("S&I STATUS");
   idxPiPermission=columnIndexOf("PERMISSION");
   idxDataGenerator=columnIndexOf("DATA GENERATOR(S)");
@@ -42,57 +44,63 @@ entries from file \a fn.
 
   QMap<QString,InfoItem>::ConstIterator it; InfoItem ii;
   QString extPrmName,prmName,cruise,gtCruise,resolvedPrmName,contribName;
-  bool isSensor,siApproved,piApproved,piPending,isRemoved,isAccepted;
-  QStringList sl,siYpiP,siNpiY,slNN; int i,n;
+  bool isSensor,siApproved,piApproved,piPending,isRemoved,isAccepted,hasData,ok;
+  QStringList sl,siYpiP,siNpiY,slNN; int i,n,gdacDatasetId;
   QMap<QString,int> prmNameMap,contribNameMap;
   siYpiP.append(columnLabels.join(tab)); siNpiY.append(columnLabels.join(tab));
   for (it=constBegin(); it!=constEnd(); ++it)
-  {
-    extPrmName=it.key(); ii=it.value();
-    cruise=ii.at(idxCruise);
-    prmName=extPrmName.split("::").at(0);
-    resolvedPrmName=prmName+" @ "+cruise;
-    gtCruise=ii.at(idxGeotracesCruise); ;
-    if ((i=gtCruise.indexOf(" "))>-1) gtCruise=gtCruise.left(i);
+    {
+      extPrmName=it.key(); ii=it.value();
+      cruise=ii.at(idxCruise);
+      prmName=extPrmName.split("::").at(0);
+      resolvedPrmName=prmName+" @ "+cruise;
+      gtCruise=ii.at(idxGeotracesCruise); ;
+      if ((i=gtCruise.indexOf(" "))>-1) gtCruise=gtCruise.left(i);
 
-    isSensor=extPrmName.contains("_SENSOR");
-    siApproved=ii.at(idxSiApproval).startsWith("approved",Qt::CaseInsensitive);
-    piApproved=ii.at(idxPiPermission).startsWith("approved",Qt::CaseInsensitive);
-    piPending=ii.at(idxPiPermission).startsWith("pending",Qt::CaseInsensitive);
-    // siApproved=!ii.at(idxSiApproval).compare("approved",Qt::CaseInsensitive);
-    // piApproved=!ii.at(idxPiPermission).compare("approved",Qt::CaseInsensitive);
-    // piPending=!ii.at(idxPiPermission).compare("pending",Qt::CaseInsensitive);
-    isRemoved=isRemovedDataset(cruise,prmName);
-    isAccepted=(!isRemoved && (isSensor || (siApproved && piApproved)));
+      isSensor=extPrmName.contains("_SENSOR");
+      siApproved=ii.at(idxSiApproval).startsWith("approved",Qt::CaseInsensitive);
+      piApproved=ii.at(idxPiPermission).startsWith("approved",Qt::CaseInsensitive);
+      piPending=ii.at(idxPiPermission).startsWith("pending",Qt::CaseInsensitive);
+      gdacDatasetId=ii.at(idxGdacDatasetId).toInt(&ok);
+      if (!ok) gdacDatasetId=ODV::missINT32;
+      hasData=gdacDatasetId!=ODV::missINT32;
+      isRemoved=isRemovedDataset(cruise,prmName);
+      isAccepted=(!isRemoved && (isSensor || (siApproved && piApproved)));
 
-    if (siApproved) extPrmNamesSiApproved.insert(extPrmName,1);
-    if (piApproved) extPrmNamesPiApproved.insert(extPrmName,1);
-    if (isAccepted)
-      {
-        prmNamesAccepted.insert(prmName,1);
-        sl=dataGeneratorNameList(ii.at(idxDataGenerator)," | "); n=sl.size();
-        for (i=0; i<n; ++i)
-          {
-            contribName=sl.at(i);
+      if (siApproved) extPrmNamesSiApproved.insert(extPrmName,1);
+      if (piApproved) extPrmNamesPiApproved.insert(extPrmName,1);
+      if (hasData && isAccepted)
+        {
+          prmNamesAccepted.insert(prmName,1);
+          sl=dataGeneratorNameList(ii.at(idxDataGenerator)," | "); n=sl.size();
+          for (i=0; i<n; ++i)
+            {
+              contribName=sl.at(i);
 
-            prmNameMap=acceptedPrmsByContribNames.value(contribName);
-            prmNameMap.insert(resolvedPrmName,1);
-            acceptedPrmsByContribNames.insert(contribName,prmNameMap);
+      //debug start
+              // int dmy;
+              // if (contribName.size()<5)
+              //   dmy=1;
+      //debug end
 
-            contribNameMap=acceptedContribNamesByPrms.value(resolvedPrmName);
-            contribNameMap.insert(contribName,1);
-            acceptedContribNamesByPrms.insert(resolvedPrmName,contribNameMap);
-          }
+              prmNameMap=acceptedPrmsByContribNames.value(contribName);
+              prmNameMap.insert(resolvedPrmName,1);
+              acceptedPrmsByContribNames.insert(contribName,prmNameMap);
 
-        sectsByCruiseName.insert(cruise,gtCruise);
-      }
+              contribNameMap=acceptedContribNamesByPrms.value(resolvedPrmName);
+              contribNameMap.insert(contribName,1);
+              acceptedContribNamesByPrms.insert(resolvedPrmName,contribNameMap);
+            }
 
-    /* for diagnostics */
-    if      (!isSensor && siApproved && piPending)
-      siYpiP.append(value(extPrmName).join(tab));
-    else if (!isSensor && !siApproved && piApproved)
-      siNpiY.append(value(extPrmName).join(tab));
-  }
+          sectsByCruiseName.insert(cruise,gtCruise);
+        }
+
+      /* for diagnostics */
+      if      (!isSensor && hasData && siApproved && piPending)
+        siYpiP.append(value(extPrmName).join(tab));
+      else if (!isSensor && hasData && !siApproved && piApproved)
+        siNpiY.append(value(extPrmName).join(tab));
+    }
 
   const QString dir=idpDiagnDir+"datasets/"; QDir().mkpath(dir);
 

@@ -41,7 +41,7 @@ public:
   void writeContributingScientistsInfo(const InfoMap& piInfosByName);
 
   int idxCruise,idxGeotracesCruise,idxPrmBarcode,idxSiApproval,idxPiPermission;
-  int idxDataGenerator,idxAuthorisedScientist,idxIdpVersion;
+  int idxGdacDatasetId,idxDataGenerator,idxAuthorisedScientist,idxIdpVersion;
   QStringList *ignoredDatasetsPtr;
   QMap<QString,QMap<QString,int> > acceptedPrmsByContribNames;
   //!< accepted parameter names (value) by data contributor names (!removed and S&I approved and PI permitted)
