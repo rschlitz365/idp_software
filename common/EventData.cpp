@@ -605,6 +605,7 @@ void EventData::writeInfoFile(const QString& fn,const QString& prmName,
   const QString fmtA="<a href=\"%1\">%2</a>\n";
   const QString proc1="As provided.";
   const QString proc2="Value obtained as median of data values from above originators. Quality flag is combination of individual flags (poorest quality).";
+  const QString proc3="Values from sampling device UCCTD discarded. Reason uncalibrated and systematically too low.";
   QString cruise=stationPtr->cruiseLbl;
   QString cruiseInfoUrl=cruisesPtr->value(cruise).at(cruisesPtr->idxCruiseReportUrl);
   QString geotracesCruise=datasetInfosPtr->sectionsByCruisePtr()->value(cruise);
@@ -613,6 +614,10 @@ void EventData::writeInfoFile(const QString& fn,const QString& prmName,
   QStringList piNames,extPrmNames,sl;
   uPrmName=(unifiedPrms) ? Param::unifiedNameLabel(prmName,sSuffix) : prmName;
   extPrmNames=extPrmNamesByUPrmName.value(uPrmName);
+
+  QString procInfo=(n>1) ? proc2 : proc1;
+  if (geotracesCruise=="GA10" && uPrmName=="CTDOXY_UP_D_CONC_SENSOR")
+    procInfo=proc3;
 
   QFile f(infoDir+fn+".html");
   if (f.open(QIODevice::WriteOnly))
@@ -648,7 +653,7 @@ void EventData::writeInfoFile(const QString& fn,const QString& prmName,
       out << "</p><br>\n";
 
       out << QString("<p>\n<h3>&#149; Processing Information</h3>\n");
-      out << ((n>1) ? proc2 : proc1) << "\n</p><br>\n\n";
+      out << procInfo << "\n</p><br>\n\n";
 
       out << QString("<p>\n<h3>&#149; References</h3>\n");
       out << fmtA.arg(fmtPublicationUrl.arg(geotracesCruise).arg(uPrmName))
