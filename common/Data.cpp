@@ -335,13 +335,15 @@ void DataItemsDB::writeDiagnostics(CruisesDB *cruisesDBPtr)
   const QString fmt="%1\t%2\t%3\t%4\t%5\t%6 - %7\t%8";
   const QString dir=idpDiagnDir+"data/"; QDir().mkpath(dir);
 
-  appendRecords(dir+"DataItemsDB_error_messages.txt",errMsgs.keys(),true);
   appendRecords(dir+"DataItemsDB_accepted_cruises.txt",
                 acceptedCruises.keys(),true);
   appendRecords(dir+"DataItemsDB_accepted_parameters.txt",
                 acceptedPrmNames.keys(),true);
   appendRecords(dir+"DataItemsDB_accepted_extended_parameters.txt",
                 acceptedExtPrmNames.keys(),true);
+
+  QDir().mkpath(idpErrorsDir);
+  appendRecords(idpErrorsDir+"DataItemsDB_error_messages.txt",errMsgs.keys(),true);
 
   QStringList sl;
 
@@ -440,16 +442,13 @@ void DataItemList::buildIndexListsByEventNumber()
     {
       idx=idxIntoDataItemDB.at(i);
       evtNum=itemAt(idx).eventNumber;
+
       if (dataIdxsByEvent.contains(evtNum))
-        {
-          idxs=dataIdxsByEvent.value(evtNum);
-          idxs.append(idx); dataIdxsByEvent.insert(evtNum,idxs);
-        }
+        idxs=dataIdxsByEvent.value(evtNum);
       else
-        {
-          idxs.clear();
-          idxs.append(idx); dataIdxsByEvent.insert(evtNum,idxs);
-        }
+        idxs.clear();
+
+      idxs.append(idx); dataIdxsByEvent.insert(evtNum,idxs);
     }
 }
 
@@ -491,10 +490,10 @@ void DataItemList::validateUnits(ParamSet *paramSet)
         bu.insert(fmt.arg(di.parameter).arg(di.unit).arg(trgUnits),1);
     }
 
-  QString dir=idpDiagnDir+"data/"; QDir().mkpath(dir);
+  QDir().mkpath(idpErrorsDir);
   QString fn=QString("BadUnits_%1.txt")
     .arg(ParamSet::dataTypeNameFromType(type));
-  appendRecords(dir+fn,bu.keys(),true);
+  appendRecords(idpErrorsDir+fn,bu.keys(),true);
 }
 
 /**************************************************************************/

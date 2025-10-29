@@ -22,6 +22,7 @@ const QString idpRootDir="C:/GEOTRACES/IDP2025/";
 const QString idpInputDir=idpRootDir+"input/";
 const QString idpOutputDir=idpRootDir+"output/";
 const QString idpDiagnDir=idpRootDir+"diagnostics/";
+const QString idpErrorsDir=idpDiagnDir+"_errors/";
 const QString idpIntermDir=idpRootDir+"intermediate/";
 const QString idpDataInpDir=idpInputDir+"data/";
 const QString idpDataSetInpDir=idpInputDir+"datasets/";

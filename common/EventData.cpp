@@ -605,7 +605,7 @@ void EventData::writeInfoFile(const QString& fn,const QString& prmName,
   const QString fmtA="<a href=\"%1\">%2</a>\n";
   const QString proc1="As provided.";
   const QString proc2="Value obtained as median of data values from above originators. Quality flag is combination of individual flags (poorest quality).";
-  const QString proc3="Values from sampling device UCCTD discarded. Reason uncalibrated and systematically too low.";
+  const QString proc3="Values from sampling device UCCTD flagged bad. Reason uncalibrated and systematically too low.";
   QString cruise=stationPtr->cruiseLbl;
   QString cruiseInfoUrl=cruisesPtr->value(cruise).at(cruisesPtr->idxCruiseReportUrl);
   QString geotracesCruise=datasetInfosPtr->sectionsByCruisePtr()->value(cruise);

@@ -54,8 +54,13 @@ entries from file \a fn.
       cruise=ii.at(idxCruise);
       prmName=extPrmName.split("::").at(0);
       resolvedPrmName=prmName+" @ "+cruise;
-      gtCruise=ii.at(idxGeotracesCruise); ;
-      if ((i=gtCruise.indexOf(" "))>-1) gtCruise=gtCruise.left(i);
+      gtCruise=ii.at(idxGeotracesCruise);
+      /* remove any leg specifier from GEOTRACES cruise name */
+      if ((i=gtCruise.indexOf(" "))>-1)
+        {
+          gtCruise=gtCruise.left(i);
+          ii[idxGeotracesCruise]=gtCruise;
+        }
 
       isSensor=extPrmName.contains("_SENSOR");
       siApproved=ii.at(idxSiApproval).startsWith("approved",Qt::CaseInsensitive);
@@ -102,7 +107,7 @@ entries from file \a fn.
         siNpiY.append(value(extPrmName).join(tab));
     }
 
-  const QString dir=idpDiagnDir+"datasets/"; QDir().mkpath(dir);
+  QString dir=idpDiagnDir+"datasets/"; QDir().mkpath(dir);
 
   /* for diagnostics */
   appendRecords(dir+"SiApproved_PiPending.txt",siYpiP,true);
@@ -111,15 +116,19 @@ entries from file \a fn.
   QMap<QString,QString>::ConstIterator its; sl.clear();
   for (its=sectsByCruiseName.constBegin();
        its!=sectsByCruiseName.constEnd(); ++its)
-  {
-    gtCruise=its.value();
-    if (gtCruise.isEmpty())
-      slNN.append(QString("%1\t%2").arg(its.key()).arg(gtCruise));
-    else
-      sl.append(QString("%1\t%2").arg(its.key()).arg(gtCruise));
-  }
+    {
+      gtCruise=its.value();
+      if (gtCruise.isEmpty())
+        slNN.append(QString("%1\t%2").arg(its.key()).arg(gtCruise));
+      else
+        sl.append(QString("%1\t%2").arg(its.key()).arg(gtCruise));
+    }
   appendRecords(dir+"Sections_By_Cruise.txt",sl,true);
   appendRecords(dir+"Sections-no-name_By_Cruise.txt",slNN,true);
+
+  dir=idpDiagnDir+"parameters/"; QDir().mkpath(dir);
+
+  appendRecords(dir+"Accepted_Parameter_Names.txt",prmNamesAccepted.keys(),true);
 }
 
 /**************************************************************************/
@@ -256,6 +265,8 @@ void DatasetInfos::writeContributingScientistsInfo(const InfoMap& piInfosByName)
     }
   appendRecords(dir+"Contributing_Scientists.txt",sl,true);
   appendRecords(dir+"Contributing_Scientists_with_Parameters.txt",slP,true);
-  appendRecords(idpDiagnDir+"datasets/Unidentified_Contributing_Scientist_Names.txt",
+
+  QDir().mkpath(idpErrorsDir);
+  appendRecords(idpErrorsDir+"Unidentified_Contributing_Scientist_Names.txt",
                 unidentifiedNames,true);
 }

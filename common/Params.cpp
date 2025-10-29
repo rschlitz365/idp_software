@@ -677,6 +677,7 @@ ParamDB::ParamDB(const QString paramListDir)
   /* load all parameter lists */
   load(inpDir+"HYDROGRAPHY_AND_BIOGEOCHEMISTRY_parameters.txt");
   load(inpDir+"DISSOLVED_TEI_parameters.txt");
+  load(inpDir+"LIGAND_parameters.txt");
   load(inpDir+"PARTICULATE_TEI_parameters.txt");
   load(inpDir+"BIO_GEOTRACES_parameters.txt");
   load(inpDir+"AEROSOL_parameters.txt");
@@ -862,6 +863,14 @@ ParamSet::ParamSet(IdpDataType dataType,ParamDB *params,
           for (k=0; k<group.prmLst.size(); ++k)
             {
               prm=group.prmLst.at(k);
+
+              /* diagnostics START */
+              // if (prm.name=="LFe_CSV10TAC_D_CONC_BOTTLE")
+              //   {
+              //     int dmy=1;
+              //   }
+              /* diagnostics END */
+
               /* checks for data availability, approvals and permissions go here... */
               hasData=!dataItemListPtr || dataItemListPtr->hasDataFor(prm.name);
               isApproved=!datasetInfosPtr ||

@@ -102,40 +102,49 @@ void processGroup(const QString &dir,const QString &fn,
    << "KEYWORD\tGROUP TITLE\tSUBGROUP\tPARAMETER\tUNITS\tPARAMETER DESCRIPTION"
    << "\t\t\t\t\t"
    << QString("%1\t\t\t\t\t").arg(lbl);
-  int i,j,k,l,prmGroupCount=jsonArr.size(),groupCount,subGroupCount,prmCount; QString s;
+  int i,j,k,l,prmGroupCount=jsonArr.size(),groupCount,subGroupCount,prmCount;
+  QString s,keyword,groupName,subGroupName;
   QJsonObject jObj,jGroupObj,jSubGroupObj,jPrmsObj;
   QJsonArray jGroupArr,jSubGroupArr,jPrmsArr;
   for (i=0; i<prmGroupCount; ++i)
-  {
-    jObj=jsonArr.at(i).toObject();
-    if (jObj.value("name").toString()==lbl)
     {
-      jGroupArr=jObj.value("subitems").toArray();
-      groupCount=jGroupArr.size();
-      for (j=0; j<groupCount; ++j)
-      {
-        jGroupObj=jGroupArr.at(j).toObject();
-        sl << QString("\t%1\t\t\t\t").arg(jGroupObj.value("name").toString());
-        jSubGroupArr=jGroupObj.value("subitems").toArray();
-        subGroupCount=jSubGroupArr.size();
-        for (k=0; k<subGroupCount; ++k)
+      jObj=jsonArr.at(i).toObject();
+      keyword=jObj.value("name").toString();
+      if (keyword==lbl)
         {
-          jSubGroupObj=jSubGroupArr.at(k).toObject();
-          sl << QString("\t\t%1\t\t\t").arg(jSubGroupObj.value("name").toString());
-          jPrmsArr=jSubGroupObj.value("subitems").toArray();
-          prmCount=jPrmsArr.size();
-          for (l=0; l<prmCount; ++l)
-          {
-            jPrmsObj=jPrmsArr.at(l).toObject();
-            sl << QString("\t\t\t%1\t%2\t%3")
-                  .arg(jPrmsObj.value("name").toString())
-                  .arg(jPrmsObj.value("unit").toString())
-                  .arg(jPrmsObj.value("label").toString());
-          }
+          jGroupArr=jObj.value("subitems").toArray();
+          groupCount=jGroupArr.size();
+          for (j=0; j<groupCount; ++j)
+            {
+              jGroupObj=jGroupArr.at(j).toObject();
+              groupName=jGroupObj.value("name").toString();
+              sl << QString("\t%1\t\t\t\t").arg(groupName);
+              jSubGroupArr=jGroupObj.value("subitems").toArray();
+              subGroupCount=jSubGroupArr.size();
+              for (k=0; k<subGroupCount; ++k)
+                {
+                  jSubGroupObj=jSubGroupArr.at(k).toObject();
+                  subGroupName=jSubGroupObj.value("name").toString();
+
+                  /* ignore ligands parameters for keyword DISSOLVED TEIS */
+                  if (keyword=="DISSOLVED TEIS" &&
+                      subGroupName.contains("ligands")) continue;
+
+                  sl << QString("\t\t%1\t\t\t").arg(subGroupName);
+                  jPrmsArr=jSubGroupObj.value("subitems").toArray();
+                  prmCount=jPrmsArr.size();
+                  for (l=0; l<prmCount; ++l)
+                    {
+                      jPrmsObj=jPrmsArr.at(l).toObject();
+                      sl << QString("\t\t\t%1\t%2\t%3")
+                            .arg(jPrmsObj.value("name").toString())
+                            .arg(jPrmsObj.value("unit").toString())
+                            .arg(jPrmsObj.value("label").toString());
+                    }
+                }
+            }
         }
-      }
     }
-  }
   appendRecords(dir+fn,sl,true);
 }
 

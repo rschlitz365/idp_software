@@ -190,8 +190,6 @@ int main()
     }
 
   /* ensure that output directory exists */
-  QString diagnDir=idpDiagnDir+"datasets/";
-  QDir().mkpath(diagnDir);
   QDir().mkpath(idpDataSetIntermDir);
 
   /* create file with name and email by OrcId */
@@ -275,7 +273,9 @@ int main()
   for (its=extPrmNamesByUnknownOrcIds.constBegin();
        its!=extPrmNamesByUnknownOrcIds.constEnd(); ++its)
     { sl << QString("%1\t%2").arg(its.key()).arg(its.value()); }
-  appendRecords(diagnDir+"Unnamed_OrcIds.txt",sl,true);
+
+  QDir().mkpath(idpErrorsDir);
+  appendRecords(idpErrorsDir+"Unnamed_OrcIds.txt",sl,true);
 
   return 0;
 }
