@@ -403,6 +403,8 @@ QString Param::unifiedNameLabel(const QString& prmName,QString& samplingSuffix)
 {
   ParamSamplingSystem samplingSystem=Param::samplingSystem(prmName);
   samplingSuffix=Param::samplingSystemStr(samplingSystem);
+  if (dataType(samplingSystem)!=SeawaterDT) return prmName;
+
   QString n=prmName;
   if (samplingSystem!=SensorSS)
     { int i=n.indexOf(samplingSuffix); if (i>-1) n=n.left(i); }

@@ -117,13 +117,23 @@ int main()
   InfoMap scientistInfoByName(idpIntermDir+"datasets/orcid_list.txt","NAME",tab);
   datasetInfos.writeContributingScientistsInfo(scientistInfoByName);
 
-  QMap<QString,QMap<QString,int> >::ConstIterator it; sl.clear();
+  QMap<QString,QMap<QString,int> >::ConstIterator it;
+
+  sl.clear();
   for (it=datasetInfos.acceptedContribNamesByPrms.constBegin();
        it!=datasetInfos.acceptedContribNamesByPrms.constEnd(); ++it)
     {
       sl << QString("%1\t%2").arg(it.key()).arg(it.value().keys().join(" | "));
     }
   appendRecords(dir+"Contributing_Scientists_by_Parameters.txt",sl,true);
+
+  sl.clear();
+  for (it=datasetInfos.acceptedContribNamesByUPrms.constBegin();
+       it!=datasetInfos.acceptedContribNamesByUPrms.constEnd(); ++it)
+    {
+      sl << QString("%1\t%2").arg(it.key()).arg(it.value().keys().join(" | "));
+    }
+  appendRecords(dir+"Contributing_Scientists_by_Unified_Parameters.txt",sl,true);
 
 
   fn=dataDir+"BOTTLE_DATA.csv";

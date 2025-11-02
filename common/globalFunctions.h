@@ -36,6 +36,8 @@ QStringList dataGeneratorNameList(const QString& str,const QString& splitStr);
 QString dateStampedFileName(const QString& fn,const QString& ext=QString("txt"));
 void decomposeName(const QString fullName,QString& firstName,QString& lastName);
 void decomposePath(const QString filePath,QString& dirPath,QString& fn);
+void decomposePathEx(const QString& filePath,
+                     QString& dirPath,QString& fn,QString& fileExt);
 double distance(double lon1,double lat1,double lon2,double lat2);
 QMap<QString,QString> eGeotracesVarDescriptions(RConfig& varsCf);
 QMap<QString,QString> eGeotracesVars(RConfig& varsCf);
@@ -51,7 +53,11 @@ void generateBaseNameFileList(const QString dir,const QString fSpec,QStringList&
 void generateFileList(const QString rootDir,const QString fSpec,
                       bool doRecurse,QStringList& sl);
 int indexOfFirstDiff(const QString& str,const QString& strC);
+int indexOfContains(const QString& str,const QStringList& sl,
+                    int from=0,Qt::CaseSensitivity cs=Qt::CaseInsensitive);
 int indexOfSampleDevice(const QList<QPair<QString,int> >& ssLst,const QString& smplDev);
+int indexOfStartsWith(const QString& str,const QStringList& sl,
+                      int from=0,Qt::CaseSensitivity cs=Qt::CaseInsensitive);
 void indexx(int n,double arrin[],int indx[]);
 QList<int> intListFromStr(const QString& str,const QString& splitStr);
 QString md5Hash(const QString& filePath);
@@ -60,6 +66,7 @@ double medianVal(double *vals,int count,double valMiss,double *dWrk,int *iWrk);
 double myround(double val,int decim);
 char* mystrlwr(char *szB);
 QString referenceURL(const QString& geotracesId,const QString& prmName);
+QString relativePathFromAbsolute(const QString &absPath,const QString &baseDir);
 QStringList sortedNameList(const QStringList& names,bool lastNameFirstName,
                            InfoMap *piInfosByName=NULL);
 QStringList splitString(const QString& str,QChar sepChar,

@@ -385,6 +385,30 @@ void decomposePath(const QString filePath,QString& dirPath,QString& fn)
 }
 
 /**************************************************************************/
+void decomposePathEx(const QString& filePath,
+                     QString& dirPath,QString& fn,QString& fileExt)
+/**************************************************************************/
+/*!
+  \brief Breaks full path-name \a filePath into drive/directory and
+  name/ext components.
+
+  Example:
+  - \a filePath = \c c:/tmp/xyz.tar.gz
+  - \a dirPath  = \c c:/tmp/
+  - \a fn       = \c xyz.tar
+  - \a fileExt  = \c .gz
+*/
+{
+  QFileInfo fi(filePath); QString ext="";
+  dirPath=fi.path(); fn=fi.fileName();
+  if (fn.contains('.')) { fn=fi.completeBaseName(); ext=fi.suffix(); }
+  fileExt=(ext.isEmpty()) ? "" : "."+ext;
+  if (dirPath==QChar('.')) dirPath="";
+  if (!dirPath.isEmpty() &&
+      !dirPath.endsWith("/") && !dirPath.endsWith("\\")) dirPath+="/";
+}
+
+/**************************************************************************/
 double distance(double lon1,double lat1,double lon2,double lat2)
 /**************************************************************************/
 /*!
@@ -677,6 +701,27 @@ int indexOfFirstDiff(const QString& str,const QString& strC)
 }
 
 /**************************************************************************/
+int indexOfContains(const QString& str,const QStringList& sl,
+                    int from,Qt::CaseSensitivity cs)
+/**************************************************************************/
+/*!
+
+  \brief Determines the 0-based index idx of the first entry in \a sl
+  with \a str containing \a sl.at(idx), searching forward from index
+  position \a from using case sensitivity \a cs.
+
+  \return The determined index, or \c -1 if no match was found.
+
+*/
+{
+  int i,n=sl.size();
+  for (i=from; i<n; ++i)
+    if (str.contains(sl.at(i),cs)) return i;
+
+  return -1;
+}
+
+/**************************************************************************/
 int indexOfSampleDevice(const QList<QPair<QString,int> >& ssLst,
                         const QString& smplDev)
 /**************************************************************************/
@@ -692,6 +737,27 @@ int indexOfSampleDevice(const QList<QPair<QString,int> >& ssLst,
   int i,n=ssLst.size();
   for (i=0; i<n; ++i)
     if (ssLst.at(i).first==smplDev) return i;
+
+  return -1;
+}
+
+/**************************************************************************/
+int indexOfStartsWith(const QString& str,const QStringList& sl,
+                      int from,Qt::CaseSensitivity cs)
+/**************************************************************************/
+/*!
+
+  \brief Determines the 0-based index idx of the first entry in \a sl
+  with \a str starting with \a sl.at(idx), searching forward from index
+  position \a from using case sensitivity \a cs.
+
+  \return The determined index, or \c -1 if no match was found.
+
+*/
+{
+  int i,n=sl.size();
+  for (i=from; i<n; ++i)
+    if (str.startsWith(sl.at(i),cs)) return i;
 
   return -1;
 }
@@ -904,6 +970,33 @@ QString referenceURL(const QString& geotracesId,const QString& prmName)
 {
   static QString refURL="http://geotraces-biblio.sedoo.fr/search?campaign=%1&param=%2";
   return refURL.arg(geotracesId).arg(prmName);
+}
+
+/**************************************************************************/
+QString relativePathFromAbsolute(const QString &absPath,const QString &baseDir)
+/**************************************************************************/
+/*!
+  \brief Constructs and returns relative path/file name.
+
+  Constructs relative path/file name from absolute path/file name \a
+  absPath relative to \a baseDir (if \a absPath is on the same drive
+  as \a baseDir, the drive id is ommitted; If \a absPath is a child of
+  \a baseDir, the name is relative to \a baseDir). In all other cases,
+  the full name is retained.
+*/
+{
+  /* relPath=absPath initially */
+  QString relPath=absPath;
+
+  /* try to find baseDir in absPath and use remainder */
+  Qt::CaseSensitivity cs=Qt::CaseSensitive;
+#ifdef Q_OS_WIN
+  cs=Qt::CaseInsensitive;
+#endif
+  if (absPath.startsWith(baseDir,cs))
+    relPath=absPath.mid(baseDir.length());
+
+  return relPath;
 }
 
 /**************************************************************************/

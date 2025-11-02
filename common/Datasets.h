@@ -46,7 +46,9 @@ public:
   QMap<QString,QMap<QString,int> > acceptedPrmsByContribNames;
   //!< accepted parameter names (value) by data contributor names (!removed and S&I approved and PI permitted)
   QMap<QString,QMap<QString,int> > acceptedContribNamesByPrms;
-  //!< accepted contributor names (value) by parameter names (!removed and S&I approved and PI permitted)
+  //!< accepted contributor names (value) by parameter names and cruises (!removed and S&I approved and PI permitted)
+  QMap<QString,QMap<QString,int> > acceptedContribNamesByUPrms;
+  //!< accepted contributor names (value) by unified parameter names and cruises (!removed and S&I approved and PI permitted)
   QMap<QString,int> prmNamesAccepted;
   //!< pure parameter names (!removed and S&I approved and PI permitted)
   QMap<QString,int> extPrmNamesSiApproved;

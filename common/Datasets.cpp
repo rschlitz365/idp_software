@@ -14,6 +14,7 @@
 #include "globalVars.h"
 #include "globalFunctions.h"
 #include "Cruises.h"
+#include "Params.h"
 
 #include "common/odv.h"
 
@@ -43,7 +44,8 @@ entries from file \a fn.
   idxIdpVersion=columnIndexOf("IDP Version");
 
   QMap<QString,InfoItem>::ConstIterator it; InfoItem ii;
-  QString extPrmName,prmName,cruise,gtCruise,resolvedPrmName,contribName;
+  QString extPrmName,prmName,uPrmName,cruise,gtCruise,resolvedPrmName,resolvedUPrmName;
+  QString contribName,smplSuffix;
   bool isSensor,siApproved,piApproved,piPending,isRemoved,isAccepted,hasData,ok;
   QStringList sl,siYpiP,siNpiY,slNN; int i,n,gdacDatasetId;
   QMap<QString,int> prmNameMap,contribNameMap;
@@ -53,7 +55,9 @@ entries from file \a fn.
       extPrmName=it.key(); ii=it.value();
       cruise=ii.at(idxCruise);
       prmName=extPrmName.split("::").at(0);
+      uPrmName=Param::unifiedNameLabel(prmName,smplSuffix);
       resolvedPrmName=prmName+" @ "+cruise;
+      resolvedUPrmName=uPrmName+" @ "+cruise;
       gtCruise=ii.at(idxGeotracesCruise);
       /* remove any leg specifier from GEOTRACES cruise name */
       if ((i=gtCruise.indexOf(" "))>-1)
@@ -95,6 +99,10 @@ entries from file \a fn.
               contribNameMap=acceptedContribNamesByPrms.value(resolvedPrmName);
               contribNameMap.insert(contribName,1);
               acceptedContribNamesByPrms.insert(resolvedPrmName,contribNameMap);
+
+              contribNameMap=acceptedContribNamesByUPrms.value(resolvedUPrmName);
+              contribNameMap.insert(contribName,1);
+              acceptedContribNamesByUPrms.insert(resolvedUPrmName,contribNameMap);
             }
 
           sectsByCruiseName.insert(cruise,gtCruise);

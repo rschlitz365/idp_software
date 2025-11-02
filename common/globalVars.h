@@ -65,3 +65,14 @@ const QList<char> mappedOdvQFlags=QList<char>()
   << '1' << '0' << '0' << '4' << '8' << '0' << '0' << '1' << '1' << '1' << '1' << '1' << '0';
 const QList<char> odvQFlags=QList<char>() << '0' << '1' << '4' << '8';
 const QList<char> mappedSdnQFlags=QList<char>() << '1' << '0' << '3' << '4';
+
+const QStringList subSectionIDP2021Names=QStringList()
+  << "GA01_e" << "GA01_w" << "GA03_e" << "GA03_w" << "GA04N_bs" << "GA04N_m"
+  << "GA06_w" << "GA08_n" << "GA08_s" << "GA08_w" << "GA13_c" << "GA13_m"
+  << "GA13_s" << "GI05_m" << "GI05_z_" << "GI05_zl" << "GI06_s" << "GIpr01_m"
+  << "GIpr01_z" << "GIpr05_n" << "GIpr05_s" << "GIpr06_c" << "GIpr06_n" << "GIPY04_X"
+  << "GIPY05_c" << "GIPY05_e_" << "GIPY05_eX" << "GIPY05_w" << "GIPY11_c"
+  << "GIPY11_e" << "GIPY11_w" << "GN01_e" << "GN01_w" << "GN02_s_" << "GN04_b_"
+  << "GN04_bn" << "GN04_cn" << "GN04_cs" << "GN04_e" << "GN05_c" << "GN05_e"
+  << "GN05_n" << "GN05_s" << "GP02_e" << "GP02_m" << "GPc01_e" << "GPc01_w"
+  << "GPpr07_all" << "GPpr08_e" << "GPpr08_w";
