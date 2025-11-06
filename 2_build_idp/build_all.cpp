@@ -170,8 +170,7 @@ int main()
 
   /* setup the IDP parameter set for SeawaterDT - non-unified parameters */
   ParamSet seawaterPrms(SeawaterDT,&params,&seawaterDataItems,&datasetInfos,false);
-  // seawaterPrms.writeDescriptions(idpOutputDir+"diagnostics/seawater/",
-  //                                "_UNIFIED_PARAMETER_DESCRIPTIONS.txt");
+  // seawaterPrms.writeDescriptions(idpDiagnDir+"parameters/","_UNIFIED_PARAMETER_DESCRIPTIONS.txt");
   seawaterPrms.writeParamLists(idpOutputDir+"parameters/","Seawater_Parameters");
 
   /* collate meta data and data and write to ODV spreadsheet file - non-unified parameters */
@@ -185,8 +184,7 @@ int main()
 
   /* setup the IDP parameter set for SeawaterDT - unified parameters */
   ParamSet seawaterPrmsU(SeawaterDT,&params,&seawaterDataItems,&datasetInfos,true);
-  // seawaterPrms.writeDescriptions(idpOutputDir+"diagnostics/seawater/",
-  //                                "_UNIFIED_PARAMETER_DESCRIPTIONS.txt");
+  // seawaterPrmsU.writeDescriptions(idpDiagnDir+"parameters/","_UNIFIED_PARAMETER_DESCRIPTIONS.txt");
   seawaterPrmsU.writeParamLists(idpOutputDir+"parameters/","Seawater_Parameters_unified");
 
   /* collate meta data and data and write to ODV spreadsheet file - unified parameters */

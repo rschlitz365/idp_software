@@ -55,6 +55,8 @@ void generateFileList(const QString rootDir,const QString fSpec,
 int indexOfFirstDiff(const QString& str,const QString& strC);
 int indexOfContains(const QString& str,const QStringList& sl,
                     int from=0,Qt::CaseSensitivity cs=Qt::CaseInsensitive);
+int indexOfContainsStr(const QStringList& sl,const QString& str,
+                       int from=0,Qt::CaseSensitivity cs=Qt::CaseInsensitive);
 int indexOfSampleDevice(const QList<QPair<QString,int> >& ssLst,const QString& smplDev);
 int indexOfStartsWith(const QString& str,const QStringList& sl,
                       int from=0,Qt::CaseSensitivity cs=Qt::CaseInsensitive);

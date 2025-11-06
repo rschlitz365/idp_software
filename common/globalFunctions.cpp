@@ -722,6 +722,27 @@ int indexOfContains(const QString& str,const QStringList& sl,
 }
 
 /**************************************************************************/
+int indexOfContainsStr(const QStringList& sl,const QString& str,
+                       int from,Qt::CaseSensitivity cs)
+/**************************************************************************/
+/*!
+
+  \brief Determines the 0-based index of the first entry in \a sl containing
+  \a str, searching forward from index position \a from using case
+  sensitivity \a cs.
+
+  \return The determined index, or \c -1 if no match was found.
+
+*/
+{
+  int i,n=sl.size();
+  for (i=from; i<n; ++i)
+    if (sl.at(i).contains(str,cs)) return i;
+
+  return -1;
+}
+
+/**************************************************************************/
 int indexOfSampleDevice(const QList<QPair<QString,int> >& ssLst,
                         const QString& smplDev)
 /**************************************************************************/
