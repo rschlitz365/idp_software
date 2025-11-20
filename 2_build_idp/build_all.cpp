@@ -103,7 +103,7 @@ int main()
   cryosphPrms.writeParamLists(idpOutputDir+"parameters/","Cryosphere_Parameters");
 
   /* collate meta data and data and write to ODV spreadsheet file */
-  outFn=QString("GEOTRACES_%1_Cryosphere_Data.txt").arg(idpName);
+  outFn=QString("GEOTRACES_%1_Cryosphere.txt").arg(idpName);
   cryosphPrms.writeDataAsSpreadsheet(&cryosphStations,&cruisesDB,
                                      &docuByExtPrmName,&bioGeotracesInfos,
                                      &piInfosByName,&keyVarsByDataVar,
@@ -126,7 +126,7 @@ int main()
   precipPrms.writeParamLists(idpOutputDir+"parameters/","Precipitation_Parameters");
 
   /* collate meta data and data and write to ODV spreadsheet file */
-  outFn=QString("GEOTRACES_%1_Precipitation_Data.txt").arg(idpName);
+  outFn=QString("GEOTRACES_%1_Precipitation.txt").arg(idpName);
   precipPrms.writeDataAsSpreadsheet(&precipStations,&cruisesDB,
                                     &docuByExtPrmName,&bioGeotracesInfos,
                                     &piInfosByName,&keyVarsByDataVar,
@@ -149,7 +149,7 @@ int main()
   aerosolPrms.writeParamLists(idpOutputDir+"parameters/","Aerosol_Parameters");
 
   /* collate meta data and data and write to ODV spreadsheet file */
-  outFn=QString("GEOTRACES_%1_Aerosol_Data.txt").arg(idpName);
+  outFn=QString("GEOTRACES_%1_Aerosols.txt").arg(idpName);
   aerosolPrms.writeDataAsSpreadsheet(&aerosolStations,&cruisesDB,
                                      &docuByExtPrmName,&bioGeotracesInfos,
                                      &piInfosByName,&keyVarsByDataVar,
@@ -174,7 +174,7 @@ int main()
   seawaterPrms.writeParamLists(idpOutputDir+"parameters/","Seawater_Parameters");
 
   /* collate meta data and data and write to ODV spreadsheet file - non-unified parameters */
-  outFn=QString("GEOTRACES_%1_Seawater_Discrete_Sample_Data.txt").arg(idpName);
+  outFn=QString("GEOTRACES_%1_Seawater.txt").arg(idpName);
   seawaterPrms.writeDataAsSpreadsheet(&seawaterStations,&cruisesDB,
                                       &docuByExtPrmName,&bioGeotracesInfos,
                                       &piInfosByName,&keyVarsByDataVar,
@@ -188,7 +188,7 @@ int main()
   seawaterPrmsU.writeParamLists(idpOutputDir+"parameters/","Seawater_Parameters_unified");
 
   /* collate meta data and data and write to ODV spreadsheet file - unified parameters */
-  outFn=QString("GEOTRACES_%1_Seawater_Discrete_Sample_Data.txt").arg(idpName);
+  outFn=QString("GEOTRACES_%1_Seawater.txt").arg(idpName);
   seawaterPrmsU.writeDataAsSpreadsheet(&seawaterStations,&cruisesDB,
                                        &docuByExtPrmName,&bioGeotracesInfos,
                                        &piInfosByName,&keyVarsByDataVarU,

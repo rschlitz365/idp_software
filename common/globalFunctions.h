@@ -70,7 +70,8 @@ char* mystrlwr(char *szB);
 QString referenceURL(const QString& geotracesId,const QString& prmName);
 QString relativePathFromAbsolute(const QString &absPath,const QString &baseDir);
 QStringList sortedNameList(const QStringList& names,bool lastNameFirstName,
-                           InfoMap *piInfosByName=NULL);
+                           InfoMap *piInfosByName=NULL,
+                           QStringList *nonOrcIdNames=NULL);
 QStringList splitString(const QString& str,QChar sepChar,
                         const QString& textQuote=QString("\""));
 void stripEnclosingChars(QString& s,const QChar& startChar,const QChar& endChar);

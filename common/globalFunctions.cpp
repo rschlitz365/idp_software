@@ -1022,7 +1022,8 @@ QString relativePathFromAbsolute(const QString &absPath,const QString &baseDir)
 
 /**************************************************************************/
 QStringList sortedNameList(const QStringList& names,bool lastNameFirstName,
-                           InfoMap *piInfosByName)
+                           InfoMap *piInfosByName,
+                           QStringList *nonOrcIdNames)
 /**************************************************************************/
 /*!
 
@@ -1047,8 +1048,17 @@ QStringList sortedNameList(const QStringList& names,bool lastNameFirstName,
     {
       name=names.at(i); lastFirstName=toLastNameFirstName(name);
       str=lastNameFirstName ? lastFirstName : name;
-      if (piInfosByName && piInfosByName->contains(name))
-        str=fmt.arg(piInfosByName->value(name).at(0)).arg(str);
+
+      /* add ORCID link if available */
+      if (piInfosByName)
+        {
+          if (piInfosByName->contains(name))
+            str=fmt.arg(piInfosByName->value(name).at(0)).arg(str);
+          else
+            if (nonOrcIdNames && !nonOrcIdNames->contains(name))
+              nonOrcIdNames->append(name);
+        }
+
       namesMap.insert(lastFirstName.toLower(),str);
     }
   return namesMap.values();
