@@ -85,7 +85,8 @@ int main()
 /**************************************************************************/
 /*!
 
-  \brief
+  \brief The following is an example DOoR dataset entry showing all
+  property names:
 
   {
   "barcode":"odqmts",

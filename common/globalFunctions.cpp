@@ -40,6 +40,20 @@ double adjustedLongitude(double lon)
 }
 
 /**************************************************************************/
+bool appendRecord(const QString& fn,const QString& record,
+                  bool deleteExistingFile)
+/**************************************************************************/
+/*!
+  \brief Appends string \a record at the end of file \a fn.
+
+  \return \c true if successful, or \c false otherwise.
+
+*/
+{
+  return appendRecords(fn,QStringList(record),deleteExistingFile);
+}
+
+/**************************************************************************/
 bool appendRecords(const QString& fn,const QStringList& records,
                    bool deleteExistingFile)
 /**************************************************************************/

@@ -19,6 +19,8 @@
 class InfoMap;
 
 /**global functions*******************************************************/
+bool appendRecord(const QString& fn,const QString& record,
+                  bool deleteExistingFile=false);
 bool appendRecords(const QString& fn,const QStringList& records,
                    bool deleteExistingFile=false);
 bool appendRecordsFromFile(const QString& fn,const QString& srcFn);

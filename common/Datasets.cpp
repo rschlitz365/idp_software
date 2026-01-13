@@ -48,7 +48,7 @@ entries from file \a fn.
   QString contribName,smplSuffix;
   bool isSensor,siApproved,piApproved,piPending,isRemoved,isAccepted,hasData,ok;
   QStringList sl,siYpiP,siNpiY,slNN; int i,n,gdacDatasetId;
-  QMap<QString,int> prmNameMap,contribNameMap;
+  QMap<QString,int> prmNameMap,contribNameMap,extPrmNamesAccepted;
   siYpiP.append(columnLabels.join(tab)); siNpiY.append(columnLabels.join(tab));
   for (it=constBegin(); it!=constEnd(); ++it)
     {
@@ -80,6 +80,7 @@ entries from file \a fn.
       if (piApproved) extPrmNamesPiApproved.insert(extPrmName,1);
       if (hasData && isAccepted)
         {
+          extPrmNamesAccepted.insert(extPrmName,1);
           prmNamesAccepted.insert(prmName,1);
           sl=dataGeneratorNameList(ii.at(idxDataGenerator)," | "); n=sl.size();
           for (i=0; i<n; ++i)
@@ -120,6 +121,7 @@ entries from file \a fn.
   /* for diagnostics */
   appendRecords(dir+"SiApproved_PiPending.txt",siYpiP,true);
   appendRecords(dir+"NotSiApproved_PiApproved.txt",siNpiY,true);
+  appendRecords(dir+"Accepted_PrmNamesAndBarcodes.txt",extPrmNamesAccepted.keys(),true);
 
   QMap<QString,QString>::ConstIterator its; sl.clear();
   for (its=sectsByCruiseName.constBegin();
