@@ -23,7 +23,7 @@
 DatasetInfos::DatasetInfos(const QString& fn,
                            const QString& keyLabel,QChar splitChar,
                            QStringList *ignoredDatasets)
-: InfoMap(fn,keyLabel,splitChar),ignoredDatasetsPtr(ignoredDatasets)
+: RTable(fn,keyLabel,splitChar),ignoredDatasetsPtr(ignoredDatasets)
 /**************************************************************************/
 /*!
 
@@ -43,13 +43,13 @@ entries from file \a fn.
   idxAuthorisedScientist=columnIndexOf("AUTORISED SCIENTIST");
   idxIdpVersion=columnIndexOf("IDP Version");
 
-  QMap<QString,InfoItem>::ConstIterator it; InfoItem ii;
+  QMap<QString,RTableRow>::ConstIterator it; RTableRow ii;
   QString extPrmName,prmName,uPrmName,cruise,gtCruise,resolvedPrmName,resolvedUPrmName;
   QString contribName,smplSuffix;
   bool isSensor,siApproved,piApproved,piPending,isRemoved,isAccepted,hasData,ok;
   QStringList sl,siYpiP,siNpiY,slNN; int i,n,gdacDatasetId;
   QMap<QString,int> prmNameMap,contribNameMap,extPrmNamesAccepted;
-  siYpiP.append(columnLabels.join(tab)); siNpiY.append(columnLabels.join(tab));
+  siYpiP.append(header.join(tab)); siNpiY.append(header.join(tab));
   for (it=constBegin(); it!=constEnd(); ++it)
     {
       extPrmName=it.key(); ii=it.value();
@@ -221,7 +221,7 @@ QStringList DatasetInfos::toCruisesStringList(CruisesDB *cruises)
 */
 {
   QString cruise,gtCruise,s; QMultiMap<QString,QString> crInfos;
-  QMap<QString,QString>::ConstIterator it; QStringList sl; InfoItem cr;
+  QMap<QString,QString>::ConstIterator it; QStringList sl; RTableRow cr;
   for (it=sectsByCruiseName.constBegin(); it!=sectsByCruiseName.constEnd(); ++it)
     {
       cruise=it.key(); gtCruise=it.value(); cr=cruises->value(cruise);
@@ -243,7 +243,7 @@ QStringList DatasetInfos::toCruisesStringList(CruisesDB *cruises)
 }
 
 /**************************************************************************/
-void DatasetInfos::writeContributingScientistsInfo(const InfoMap& piInfosByName)
+void DatasetInfos::writeContributingScientistsInfo(const RTable& piInfosByName)
 /**************************************************************************/
 /*!
 
@@ -258,7 +258,7 @@ void DatasetInfos::writeContributingScientistsInfo(const InfoMap& piInfosByName)
   QStringList sortedNamesFL=sortedNameList(scientistNames,false);
   QStringList sortedNamesLF=sortedNameList(scientistNames,true);
   int i,n=scientistNames.size(); QMap<QString,int> prmNameMap;
-  QString scientistNameFL,scientistNameLF; InfoItem ii;
+  QString scientistNameFL,scientistNameLF; RTableRow ii;
   QStringList unidentifiedNames,sl,slP;
   for (i=0; i<n; ++i)
     {

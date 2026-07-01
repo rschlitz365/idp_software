@@ -237,22 +237,22 @@ void DataItemsDB::appendItems(const QStringList& lines,QChar splitChar)
 {
   int i,lineCount=lines.size(); bool isApproved,isRemoved; DataItem di;
   QString prmName,extPrmName,cruise,cruiseFromEvents,geotracesCruise,s;
-  InfoItem datasetInfoItem,eventInfoItem;
+  RTableRow datasetRTableRow,eventRTableRow;
   for (i=1; i<lineCount; ++i)
     {
       di=DataItem(this,lines.at(i),splitChar);
       extPrmName=di.parameter;
-      eventInfoItem=eventsDBPtr->value(QString::number(di.eventNumber));
-      datasetInfoItem=datasetInfosPtr->value(extPrmName);
+      eventRTableRow=eventsDBPtr->value(QString::number(di.eventNumber));
+      datasetRTableRow=datasetInfosPtr->value(extPrmName);
 
-      if (datasetInfoItem.isEmpty())
+      if (datasetRTableRow.isEmpty())
         {
           errMsgs.insert(QString("DataItemsDB::Dataset not found %1").arg(extPrmName),1);
           continue;
         }
 
-      cruise=datasetInfoItem.at(datasetInfosPtr->idxCruise);
-      cruiseFromEvents=eventInfoItem.at(0);
+      cruise=datasetRTableRow.at(datasetInfosPtr->idxCruise);
+      cruiseFromEvents=eventRTableRow.at(0);
       geotracesCruise=datasetInfosPtr->geotracesCruiseNameFor(cruise);
       prmName=Param::paramNameFromExtendedName(extPrmName);
       isApproved=datasetInfosPtr->hasApprovalsForExtendedParamName(extPrmName);
@@ -364,7 +364,7 @@ void DataItemsDB::writeDiagnostics(CruisesDB *cruisesDBPtr)
 
   /* create accepted_cruises summary */
   QString cruise,gtCruise,s; QMultiMap<QString,QString> crInfos;
-  QMap<QString,QString>::ConstIterator it; InfoItem cr;
+  QMap<QString,QString>::ConstIterator it; RTableRow cr;
   for (it=acceptedCruises.constBegin(); it!=acceptedCruises.constEnd(); ++it)
     {
       cruise=it.key(); gtCruise=it.value(); cr=cruisesDBPtr->value(cruise);
@@ -402,7 +402,7 @@ DataItemList::DataItemList(IdpDataType dataType,
 {
   QList<int> idxs; int i,k,dataItemCount=dataItemsDBPtr->size();
   QString prmName,extPrmName,cruise,geotracesCruise;
-  DataItem di; InfoItem datasetInfoItem; IdpDataType dType;
+  DataItem di; RTableRow datasetRTableRow; IdpDataType dType;
 
   for (i=0; i<dataItemCount; ++i)
     {

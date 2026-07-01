@@ -15,12 +15,12 @@
 #include <QStringList>
 
 #include "globalDefines.h"
-#include "InfoMap.h"
+#include "RTable.h"
 
 class CruisesDB;
 
 /**************************************************************************/
-class DatasetInfos : public InfoMap
+class DatasetInfos : public RTable
 /**************************************************************************/
 /*!
 
@@ -38,7 +38,7 @@ public:
   bool isRemovedDataset(const QString& cruise,const QString& prmName);
   QMap<QString,QString>* sectionsByCruisePtr() { return &sectsByCruiseName; }
   QStringList toCruisesStringList(CruisesDB *cruises);
-  void writeContributingScientistsInfo(const InfoMap& piInfosByName);
+  void writeContributingScientistsInfo(const RTable& piInfosByName);
 
   int idxCruise,idxGeotracesCruise,idxPrmBarcode,idxSiApproval,idxPiPermission;
   int idxGdacDatasetId,idxDataGenerator,idxAuthorisedScientist,idxIdpVersion;

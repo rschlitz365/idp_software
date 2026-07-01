@@ -14,7 +14,7 @@
 
 #include "globalDefines.h"
 #include "Events.h"
-#include "InfoMap.h"
+#include "RTable.h"
 
 class Station;
 

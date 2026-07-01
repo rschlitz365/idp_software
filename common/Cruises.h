@@ -13,11 +13,11 @@
 #include <QString>
 
 #include "globalDefines.h"
-#include "InfoMap.h"
+#include "RTable.h"
 
 
 /**************************************************************************/
-class CruisesDB : public InfoMap
+class CruisesDB : public RTable
 /**************************************************************************/
 /*!
 

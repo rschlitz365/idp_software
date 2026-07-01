@@ -16,7 +16,7 @@ SOURCES       = prepare_idp.cpp \
                 ../common/Datasets.cpp \
                 ../common/EventData.cpp \
                 ../common/Events.cpp \
-                ../common/InfoMap.cpp \
+                ../common/RTable.cpp \
                 ../common/Params.cpp \
                 ../common/RMemArea.cpp\
                 ../common/RRandomVar.cpp\

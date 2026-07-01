@@ -11,7 +11,7 @@
 
 SOURCES       = door_dataset_parser.cpp \
                 ../common/globalFunctions.cpp \
-                ../common/InfoMap.cpp \
+                ../common/RTable.cpp \
                 ../common/Data.cpp \
                 ../common/Datasets.cpp \
                 ../common/EventData.cpp \

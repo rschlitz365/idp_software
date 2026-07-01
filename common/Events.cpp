@@ -61,7 +61,7 @@ QString EventInfo::toString(const QString& sep) const
 
 /**************************************************************************/
 EventsDB::EventsDB(const QString& fn,const QString& keyLabel,QChar splitChar)
-  : InfoMap(fn,keyLabel,splitChar)
+  : RTable(fn,keyLabel,splitChar)
 /**************************************************************************/
 /*!
 
@@ -96,8 +96,8 @@ void EventsDB::autoCorrectStationLabels()
 
 */
 {
-  QMap<QString,InfoItem>::ConstIterator it;
-  QString key,cruise,stLbl,castLbl,s; InfoItem ii;
+  QMap<QString,RTableRow>::ConstIterator it;
+  QString key,cruise,stLbl,castLbl,s; RTableRow ii;
   for (it=constBegin(); it!=constEnd(); ++it)
     {
       key=it.key(); ii=it.value(); cruise=ii.at(idxCruise);
@@ -208,7 +208,7 @@ StationList EventsDB::collateStationsByProximity(const QStringList& eventNumbers
   QStringList evtNumbers=eventNumbers;
   StationList stations; Station st,stRef;
   int i,j,m,n; double dTime,dDist,rTime,rLon,rLat;
-  InfoItem ii; EventInfo ei;
+  RTableRow ii; EventInfo ei;
   QString evtNumber,stationLbl,stationKey;
 
   do
@@ -274,7 +274,7 @@ collateStationsByStationLabel(const QStringList& eventNumbers,
 
 */
 {
-  QMap<QString,Station> stations; InfoItem ii;
+  QMap<QString,Station> stations; RTableRow ii;
   int i,n=eventNumbers.size();
   QString evtNumber,stationLbl,stationKey;
 
@@ -320,11 +320,11 @@ void EventsDB::diagnoseEventCorrections()
   EventsDB eventsCorr(dataDir+"event_corrections/EVENTS_corrected.csv",
                       "BODC_EVENT_NUMBER",comma);
   QStringList sl,slC,slU,slP,corrEventNums=eventsCorr.keys();
-  int i,n=corrEventNums.size(),idxDiff; InfoItem ii,iiC;
+  int i,n=corrEventNums.size(),idxDiff; RTableRow ii,iiC;
   int idxBotDep=eventsDB.columnIndexOf("BOTTOM DEPTH [M]");
   EventInfo ei,eiC; double posTol=0.01; QString orig,corr,sDiff;
 
-  slC << eventsCorr.columnLabels.join(",");
+  slC << eventsCorr.header.join(",");
   for (i=0; i<n; ++i)
     {
       ii=eventsDB.value(corrEventNums.at(i));
@@ -372,7 +372,7 @@ void EventsDB::diagnoseEventCorrections()
 }
 
 /**************************************************************************/
-EventInfo EventsDB::eventInfoOf(const InfoItem& ii)
+EventInfo EventsDB::eventInfoOf(const RTableRow& ii)
 /**************************************************************************/
 /*!
 
@@ -468,7 +468,7 @@ QStringList EventsDB::spreadsheetHeader()
 
 */
 {
-  QStringList sl,colLbls=prependedColumnLabels("_"); int i,n=columnLabels.size();
+  QStringList sl,colLbls=prefixedColumnLabels("_"); int i,n=header.size();
 
   /* write //<MetaVariable> and //<DataVariable> lines */
   sl << fmtMvDef.arg("Station").arg("METASTATION")

@@ -31,8 +31,8 @@
 EventData::EventData(Station *station,int eventIdx,
                      DatasetInfos *datasetInfos,CruisesDB *cruises,
                      ParamSet *paramSet,DataItemList *dataItemList,
-                     InfoMap *docuByExtPrmName,InfoMap *bioGeotracesInfos,
-                     InfoMap *piInfosByName,UnitConverter *unitConverter,
+                     RTable *docuByExtPrmName,RTable *bioGeotracesInfos,
+                     RTable *piInfosByName,UnitConverter *unitConverter,
                      QMap<char,QString> *bottleFlagDescr,
                      const QString& infoFileDir)
   : stationPtr(station),datasetInfosPtr(datasetInfos),cruisesPtr(cruises),
@@ -327,7 +327,7 @@ if (inclMetaValues)
     StationInfo si(*stationPtr);
     QMap<QString,QString> *sectionsByCruisePtr=
       datasetInfosPtr->sectionsByCruisePtr();
-    InfoItem cruise=cruisesPtr->value(stationPtr->cruiseLbl);
+    RTableRow cruise=cruisesPtr->value(stationPtr->cruiseLbl);
     QString geotracesCruise=sectionsByCruisePtr->value(stationPtr->cruiseLbl);
     if (geotracesCruise.isEmpty()) geotracesCruise="unknown_cruise";
 
@@ -500,7 +500,7 @@ QStringList EventData::spreadsheetDataRecords(int bodcBottleNumber,
   /* start with the meta values */
   QString mvStr=metaValueString(inclMetaValues);
   char bf=bodcBottleFlags.at(bottleIdx);
-  InfoItem bi=bioGeotracesInfosPtr->value(QString::number(bodcBottleNumber));
+  RTableRow bi=bioGeotracesInfosPtr->value(QString::number(bodcBottleNumber));
   bool haveBi=bi.size()>0;
   QStringList cellSampleIds=cellSampleIdsByBodcBottleNumber.value(bodcBottleNumber);
 
@@ -556,7 +556,7 @@ QStringList EventData::spreadsheetDataLines()
 
 /**************************************************************************/
 QStringList EventData::spreadsheetHeaderLines(ParamSet *paramSet,
-                                              InfoMap *keyVarsByDataVar)
+                                              RTable *keyVarsByDataVar)
 /**************************************************************************/
 /*!
 
@@ -569,7 +569,7 @@ QStringList EventData::spreadsheetHeaderLines(ParamSet *paramSet,
   const QString fmtPrm="\t%1\tSTANDARD_DEV\tQV:SEADATANET\tINFOS";
   QString header=paramSet->metaVarHeader()+"\t"+paramSet->leadDataVarHeader();
 
-  QStringList sl; InfoItem ii; QString prmLbl,kvLbl;
+  QStringList sl; RTableRow ii; QString prmLbl,kvLbl;
   sl << QString("//<Encoding>UTF-8</Encoding>\n//<DataField>%1</DataField>\n//<DataType>Profiles</DataType>\n//<Description>%2</Description>\n//").arg(paramSet->collectionField()).arg(paramSet->collectionDescription());
   sl << paramSet->metaVarDefinitionStyledLines();
   sl << "//" << paramSet->leadDataVarDefinitionStyledLines(keyVarsByDataVar);
@@ -609,7 +609,7 @@ void EventData::writeInfoFile(const QString& fn,const QString& prmName,
   QString cruise=stationPtr->cruiseLbl;
   QString cruiseInfoUrl=cruisesPtr->value(cruise).at(cruisesPtr->idxCruiseReportUrl);
   QString geotracesCruise=datasetInfosPtr->sectionsByCruisePtr()->value(cruise);
-  int i,n=idxList.size(); InfoItem mi,di;
+  int i,n=idxList.size(); RTableRow mi,di;
   QString extPrmName,uPrmName,sSuffix,methodsUrl,methodsId,piEmail;
   QStringList piNames,extPrmNames,sl;
   uPrmName=(unifiedPrms) ? Param::unifiedNameLabel(prmName,sSuffix) : prmName;

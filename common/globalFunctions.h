@@ -16,7 +16,7 @@
 #include "globalDefines.h"
 #include "common/RConfig.h"
 
-class InfoMap;
+class RTable;
 
 /**global functions*******************************************************/
 bool appendRecord(const QString& fn,const QString& record,
@@ -72,7 +72,7 @@ char* mystrlwr(char *szB);
 QString referenceURL(const QString& geotracesId,const QString& prmName);
 QString relativePathFromAbsolute(const QString &absPath,const QString &baseDir);
 QStringList sortedNameList(const QStringList& names,bool lastNameFirstName,
-                           InfoMap *piInfosByName=NULL,
+                           RTable *piInfosByName=NULL,
                            QStringList *nonOrcIdNames=NULL);
 QStringList splitString(const QString& str,QChar sepChar,
                         const QString& textQuote=QString("\""));

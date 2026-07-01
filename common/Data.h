@@ -16,7 +16,7 @@
 #include <QStringList>
 
 #include "globalDefines.h"
-#include "InfoMap.h"
+#include "RTable.h"
 
 class CruisesDB;
 class DataItemsDB;

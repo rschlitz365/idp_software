@@ -14,7 +14,7 @@
 #include <QStringList>
 
 #include "globalDefines.h"
-#include "InfoMap.h"
+#include "RTable.h"
 
 class CruisesDB;
 class StationList;
@@ -53,7 +53,7 @@ public:
 
 
 /**************************************************************************/
-class EventsDB : public InfoMap
+class EventsDB : public RTable
 /**************************************************************************/
 /*!
 
@@ -78,7 +78,7 @@ public:
                                             QStringList& noNameEventNumbers,
                                             EventsDB *eventsDB);
   static void diagnoseEventCorrections();
-  EventInfo eventInfoOf(const InfoItem& ii);
+  EventInfo eventInfoOf(const RTableRow& ii);
   EventInfo eventInfoOf(const QString& eventNumberStr);
   double gregorianDay(const QString& dateTimeStr);
   QStringList spreadsheetHeader();

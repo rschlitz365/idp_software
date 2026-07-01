@@ -40,7 +40,7 @@ QString ODVVarMap::concatenatedFullLabels(int strtIdx,int endIdx)
 
 /**************************************************************************/
 QStringList ODVVarMap::definitionStyledLines(bool useDataVarStyle,
-                                             InfoMap *keyVarsByDataVar)
+                                             RTable *keyVarsByDataVar)
 /**************************************************************************/
 /*!
 
@@ -50,7 +50,7 @@ QStringList ODVVarMap::definitionStyledLines(bool useDataVarStyle,
 
 */
 {
-  int i=0; InfoItem ii;
+  int i=0; RTableRow ii;
   QStringList sl,pl; QString valType,prmLbl,kvLbl;
   QMap<int,QString>::ConstIterator it;
   for (it=constBegin(); it!=constEnd(); ++it,++i)
@@ -1123,7 +1123,7 @@ void ParamSet::unifyParameters(IdpDataType dataType)
   if ((i=unifySS.indexOf(Param::samplingSystemStr(SensorSS)))>-1)
     unifySS.removeAt(i);
 
-  InfoMap descrByUVar(idpPrmListInpDir
+  RTable descrByUVar(idpPrmListInpDir
                       +"_UNIFIED_PARAMETER_DESCRIPTIONS.txt",
                       "Parameter Name",tab);
 
@@ -1188,8 +1188,8 @@ void ParamSet::unifyParameters(IdpDataType dataType)
 /**************************************************************************/
 void ParamSet
 ::writeDataAsSpreadsheet(StationList *stationList,CruisesDB *cruisesDB,
-                         InfoMap *docuByExtPrmName,InfoMap *bioGeotracesInfos,
-                         InfoMap *piInfosByName,InfoMap *keyVarsByDataVar,
+                         RTable *docuByExtPrmName,RTable *bioGeotracesInfos,
+                         RTable *piInfosByName,RTable *keyVarsByDataVar,
                          UnitConverter *unitConverter,
                          QMap<char,QString> *bottleFlagDescr,
                          const QString& dir,const QString& fn)

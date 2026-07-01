@@ -17,7 +17,7 @@
 // #include "globalDefines.h"
 #include "Data.h"
 #include "Datasets.h"
-#include "InfoMap.h"
+#include "RTable.h"
 #include "Replacer.h"
 #include "Stations.h"
 #include "UnitConverter.h"
@@ -38,7 +38,7 @@ class ODVVarMap : public QMap<int,QString>
 public:
   QString concatenatedFullLabels(int strtIdx=0,int endIdx=-1);
   QStringList definitionStyledLines(bool useDataVarStyle,
-                                    InfoMap *keyVarsByDataVar=NULL);
+                                    RTable *keyVarsByDataVar=NULL);
   QString fullLabel(int varID);
   void load(const QString& fn);
   QStringList odvFileStyledLines();
@@ -186,7 +186,7 @@ class ParamSet
   static QString dataTypeNameFromType(IdpDataType dataType);
   bool hasUnifiedPrms() { return unifiedPrms; }
   int largestKey() { return maxPrmID; }
-  QStringList leadDataVarDefinitionStyledLines(InfoMap *keyVarsByDataVar)
+  QStringList leadDataVarDefinitionStyledLines(RTable *keyVarsByDataVar)
   { return leadDataVars.definitionStyledLines(true,keyVarsByDataVar); }
   int leadDataVarCount() { return leadDataVars.size(); }
   QString leadDataVarHeader() { return leadDataVars.concatenatedFullLabels();}
@@ -210,8 +210,8 @@ class ParamSet
   QString paramUnitsOf(const QString& prmName);
   void unifyParameters(IdpDataType dataType);
   void writeDataAsSpreadsheet(StationList *stationList,CruisesDB *cruisesDB,
-                              InfoMap *docuByExtPrmName,InfoMap *bioGeotracesInfos,
-                              InfoMap *piInfosByName,InfoMap *keyVarsByDataVar,
+                              RTable *docuByExtPrmName,RTable *bioGeotracesInfos,
+                              RTable *piInfosByName,RTable *keyVarsByDataVar,
                               UnitConverter *unitConverter,
                               QMap<char,QString> *bottleFlagDescr,
                               const QString& dir,const QString& fn);

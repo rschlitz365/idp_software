@@ -14,7 +14,7 @@
 #include "common/Cruises.h"
 #include "common/Data.h"
 #include "common/Events.h"
-#include "common/InfoMap.h"
+#include "common/RTable.h"
 #include "common/Params.h"
 #include "common/RRandomVar.h"
 #include "common/RMemArea.h"
@@ -48,11 +48,11 @@ int main()
   UnitConverter unitConverter(idpInputDir+"unit_conversions/unit_conversions.txt");
 
   /* load the bioGEOTRACES information */
-  InfoMap bioGeotracesInfos(idpDataInpDir+"biogeotraces/BioGEOTRACES_Omics.txt",
+  RTable bioGeotracesInfos(idpDataInpDir+"biogeotraces/BioGEOTRACES_Omics.txt",
                             "BODC Bottle Number",tab);
 
   /* load the bottle and cell data documentation information from file */
-  InfoMap docuByExtPrmName(discreteDataDir+"BOTTLE_DATA_DOCUMENTATION.csv","PARAMETER",comma);
+  RTable docuByExtPrmName(discreteDataDir+"BOTTLE_DATA_DOCUMENTATION.csv","PARAMETER",comma);
   docuByExtPrmName.insertFile(discreteDataDir+"CELL_DATA_DOCUMENTATION.csv","PARAMETER",comma);
 
   /* load the cruise information from file */
@@ -66,14 +66,14 @@ int main()
   eventsDB.autoCorrectStationLabels();
 
   /* load the PI information from file */
-  InfoMap piInfosByName(idpIntermDir+"datasets/orcid_list.txt","NAME",tab);
+  RTable piInfosByName(idpIntermDir+"datasets/orcid_list.txt","NAME",tab);
 
   /* load all IDP parameter definitions */
   ParamDB params(idpIntermDir+"parameters/");
 
   /* load the key variable associations from file, both unified and non-unified versions */
-  InfoMap keyVarsByDataVar(idpPrmListInpDir+"_KEY_VARIABLES.txt","DATA VARIABLE",tab);
-  InfoMap keyVarsByDataVarU(idpPrmListInpDir+"_UNIFIED_KEY_VARIABLES.txt","DATA VARIABLE",tab);
+  RTable keyVarsByDataVar(idpPrmListInpDir+"_KEY_VARIABLES.txt","DATA VARIABLE",tab);
+  RTable keyVarsByDataVarU(idpPrmListInpDir+"_UNIFIED_KEY_VARIABLES.txt","DATA VARIABLE",tab);
 
   /* load the DOoR dataset information from file */
   QStringList ignoredDatasets=fileContents(idpDataSetInpDir+"datasets_ignore.txt");

@@ -14,7 +14,7 @@
 #include "common/Cruises.h"
 #include "common/Data.h"
 #include "common/Events.h"
-#include "common/InfoMap.h"
+#include "common/RTable.h"
 #include "common/Params.h"
 #include "common/RRandomVar.h"
 #include "common/RMemArea.h"
@@ -46,11 +46,11 @@ int main()
   UnitConverter unitConverter(idpInputDir+"unit_conversions/unit_conversions.txt");
 
   /* load the bioGEOTRACES information */
-  InfoMap bioGeotracesInfos(idpDataInpDir+"biogeotraces/BioGEOTRACES_Omics.txt",
+  RTable bioGeotracesInfos(idpDataInpDir+"biogeotraces/BioGEOTRACES_Omics.txt",
                             "BODC Bottle Number",tab);
 
   /* load the bottle and cell data documentation information from file */
-  InfoMap docuByExtPrmName(dataDir+"BOTTLE_DATA_DOCUMENTATION.csv","PARAMETER",comma);
+  RTable docuByExtPrmName(dataDir+"BOTTLE_DATA_DOCUMENTATION.csv","PARAMETER",comma);
   docuByExtPrmName.insertFile(dataDir+"CELL_DATA_DOCUMENTATION.csv","PARAMETER",comma);
 
   /* load the cruise information from file */
@@ -114,7 +114,7 @@ int main()
   appendRecords(dir+"Cruises.txt",datasetInfos.toCruisesStringList(&cruisesDB),true);
 
   /* create the IDP2025 contributor documents */
-  InfoMap scientistInfoByName(idpIntermDir+"datasets/orcid_list.txt","NAME",tab);
+  RTable scientistInfoByName(idpIntermDir+"datasets/orcid_list.txt","NAME",tab);
   datasetInfos.writeContributingScientistsInfo(scientistInfoByName);
 
   QMap<QString,QMap<QString,int> >::ConstIterator it;

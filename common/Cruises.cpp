@@ -12,7 +12,7 @@
 
 /**************************************************************************/
 CruisesDB::CruisesDB(const QString& fn,const QString& keyLabel,QChar splitChar)
-  : InfoMap(fn,keyLabel,splitChar)
+  : RTable(fn,keyLabel,splitChar)
 /**************************************************************************/
 /*!
 

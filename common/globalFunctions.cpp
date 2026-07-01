@@ -20,9 +20,11 @@
 #include <QTextStream>
 
 #include "globalVars.h"
-#include "InfoMap.h"
-#include "common/constants.h"
-#include "common/odv.h"
+#include "RTable.h"
+// #include "common/constants.h"
+// #include "common/odv.h"
+#include "constants.h"
+#include "odv.h"
 
 /**************************************************************************/
 double adjustedLongitude(double lon)
@@ -1036,7 +1038,7 @@ QString relativePathFromAbsolute(const QString &absPath,const QString &baseDir)
 
 /**************************************************************************/
 QStringList sortedNameList(const QStringList& names,bool lastNameFirstName,
-                           InfoMap *piInfosByName,
+                           RTable *piInfosByName,
                            QStringList *nonOrcIdNames)
 /**************************************************************************/
 /*!

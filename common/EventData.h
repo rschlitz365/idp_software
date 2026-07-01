@@ -16,7 +16,7 @@
 
 #include "globalDefines.h"
 #include "Events.h"
-#include "InfoMap.h"
+#include "RTable.h"
 #include "RMemArea.h"
 
 class CruisesDB;
@@ -40,8 +40,8 @@ public:
   EventData(Station *station,int eventIdx,
             DatasetInfos *datasetInfos,CruisesDB *cruises,
             ParamSet *paramSet,DataItemList *dataItemList,
-            InfoMap *docuByExtPrmName,InfoMap *bioGeotracesInfos,
-            InfoMap *piInfosByName,UnitConverter *unitConverter,
+            RTable *docuByExtPrmName,RTable *bioGeotracesInfos,
+            RTable *piInfosByName,UnitConverter *unitConverter,
             QMap<char,QString> *bottleFlagDescr,
             const QString& infoFileDir);
 
@@ -60,7 +60,7 @@ public:
   QStringList spreadsheetDataRecords(int bodcBottleNumber,bool inclMetaValues);
   QStringList spreadsheetDataLines();
   static QStringList spreadsheetHeaderLines(ParamSet *paramSet,
-                                            InfoMap *keyVarsByDataVar);
+                                            RTable *keyVarsByDataVar);
   void writeInfoFile(const QString& fn,const QString& prmName,
                      const QList<int> idxList);
 
@@ -70,9 +70,9 @@ public:
   ParamSet *paramSetPtr; //!< pointer to parameter set for the data type
   DataItemList *dataItemListPtr; //!< pointer to data item set for the data type
   DatasetInfos *datasetInfosPtr; //!< pointer to data set infos object
-  InfoMap *docuByExtPrmNamePtr; //!< pointer to data documentation object
-  InfoMap *bioGeotracesInfosPtr; //!< pointer to bioGEOTRACES information
-  InfoMap *piInfosByNamePtr; //!< pointer to PI information
+  RTable *docuByExtPrmNamePtr; //!< pointer to data documentation object
+  RTable *bioGeotracesInfosPtr; //!< pointer to bioGEOTRACES information
+  RTable *piInfosByNamePtr; //!< pointer to PI information
   UnitConverter *unitConvPtr; //!< pointer to unit converter
   QMap<char,QString> *bottleFlagDescrPtr; //!<
   //!< pointer to bottle flag description dictionary
